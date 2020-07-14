@@ -62,7 +62,7 @@
 			</f:Form>
 		</VBox>
 		<buttons>
-			<Button text="Submit Review" icon="sap-icon://accept" type="Emphasized" press="OnSubmitReview2">
+			<Button text="Submit For Finance Release" icon="sap-icon://accept" type="Emphasized" press="OnSubmitReview2">
 				<customData>
 					<core:CustomData key="multi" value="true"/>
 					<core:CustomData key="remember" value="true"/>
