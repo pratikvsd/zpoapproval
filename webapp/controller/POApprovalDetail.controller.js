@@ -13,7 +13,7 @@ sap.ui.define([
 	return Controller.extend("POApproval.ZPOApproval.controller.POApprovalDetail", {
 
 		//initialize Model
-		//test model 2
+		//test model 3
 		onInit: function (oEvent) {
 			//	this._UserID = sap.ushell.Container.getService("UserInfo").getId();
 			this._UserID = "PURCHASE1";
