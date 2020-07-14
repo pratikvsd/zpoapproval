@@ -1,0 +1,35 @@
+{
+    "application": {
+        "id": "",
+        "title": "POApproval.ZPOApproval.ZPOApproval",
+        "description": "PO Approval Demo ",
+        "type": "SAP_UI5_Component",
+        "componentUrl": "/",
+        "appUrl": "#ZPOApproval-Display",
+        "navigationComponentName": "POApproval.ZPOApproval",
+        "intentSemanticObject": "ZPOApproval",
+        "intentAction": "Display",
+        "html5ApplicationName": "zapprovaldemo",
+        "HCPParentApplicationName": ""
+    },
+    "assignment": {
+        "groups": [
+            "dd92cc14-d8d6-403a-b127-5754640f59c1-1592562892293"
+        ],
+        "contentPackages": [
+            "c667c6b4-83f6-42d3-ad1c-c238aade6290-1592562863708"
+        ],
+        "categories": []
+    },
+    "tile": {
+        "type": "StaticTile",
+        "title": "PO Approval Demo",
+        "subtitle": "For Testing",
+        "searchKeywords": "PO Approval Demo,For Testing",
+        "displayIconUrl": "sap-icon://approvals",
+        "displayInfoText": "",
+        "size": "1x1",
+        "serviceURL": "",
+        "refreshInterval": ""
+    }
+}

@@ -1,0 +1,61 @@
+<core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+	<Dialog noDataText="No Products Found" contentWidth="700px" horizontalScrolling="false">
+		<VBox class="sapUiSmallMargin">
+			<f:Form id="FormToolbar" editable="true" ariaLabelledBy="Title1">
+				<f:layout>
+					<f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4"
+						emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+				</f:layout>
+				<f:formContainers>
+					<f:FormContainer>
+						<f:formElements>
+							<f:FormElement label="Query">
+								<f:fields>
+									<TextArea id="idQuery" width="90%"/>
+								</f:fields>
+							</f:FormElement>
+							<f:FormElement label="To User">
+								<f:fields>
+<!--									<TableSelectDialog id="tablQuery" noDataText="No Products Found" title="Select Product" search="handleSearch" confirm="handleClose"
+										cancel="handleClose" items="{ path : '/results', sorter : { path : 'Bname'} }">
+										<ColumnListItem>
+											<cells>
+												<Text title="{Bname}"/>
+												<Text text="{NameFirst}"/>
+											</cells>
+										</ColumnListItem>
+										<columns>
+											<Column width="12em">
+												<header>
+													<Text text="User Id"/>
+												</header>
+											</Column>
+											<Column minScreenWidth="Tablet" demandPopin="true">
+												<header>
+													<Text text="User Name"/>
+												</header>
+											</Column>
+										</columns>
+									</TableSelectDialog>
+-->										<ComboBox id="cmbUser" items="{ path: '/results', sorter: { path: 'Bname' } }">
+										<core:Item key="{Bname}" text="{NameFirst} {NameLast}"/>
+									</ComboBox>
+									<!--<Input type="Text" id="QUserid" valueHelpRequest="_handleValueHelpUser" suggestionItems="{path:'/results'}" textFormatMode="Key" width="90%"
+										showSuggestion="true" showValueHelp="true" valueHelpOnly="true">
+										<suggestionItems>
+											<core:Item text="{NameFirst} {NameLast}" key="{Bname}"/>
+										</suggestionItems>
+									</Input>-->
+								</f:fields>
+							</f:FormElement>
+						</f:formElements>
+					</f:FormContainer>
+				</f:formContainers>
+			</f:Form>
+		</VBox>
+		<buttons>
+			<Button text="Submit Query" icon="sap-icon://accept" type="Emphasized" press="OnSubmitQuery"></Button>
+			<Button text="Cancel" type="Reject" icon="sap-icon://decline" press="OnCancelQuery"></Button>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

@@ -1,0 +1,41 @@
+<core:FragmentDefinition  xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
+	<Dialog noDataText="No Products Found" contentWidth="700px" horizontalScrolling="false">
+		<VBox class="sapUiSmallMargin">
+			<f:Form id="FormReviewButton" editable="true" ariaLabelledBy="Title1">
+				<f:layout>
+					<f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4"
+						emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false"/>
+				</f:layout>
+				<f:formContainers>
+					<f:FormContainer>
+						<f:formElements>
+							<f:FormElement label="Review Comments">
+								<f:fields>
+									<TextArea id="idReviewComments" width="90%"/>
+								</f:fields>
+							</f:FormElement>
+							<!--<f:FormElement id="lblAddUser" label="Add User" visible="true">
+								<Button icon="sap-icon://add" press="_handleValueHelpReviewUserAssign" width="15%">
+									<customData>
+										<core:CustomData key="multi" value="true"/>
+										<core:CustomData key="remember" value="true"/>
+									</customData>
+								</Button>
+								
+							</f:FormElement>-->
+						</f:formElements>
+					</f:FormContainer>
+				</f:formContainers>
+			</f:Form>
+		</VBox>
+		<buttons>
+			<Button text="Submit Review" icon="sap-icon://accept" type="Emphasized" press="OnSubmitReview">
+				<customData>
+					<core:CustomData key="multi" value="true"/>
+					<core:CustomData key="remember" value="true"/>
+				</customData>
+			</Button>
+			<Button text="Cancel" type="Reject" icon="sap-icon://decline" press="OnCancelReview"></Button>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>
