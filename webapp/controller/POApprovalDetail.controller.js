@@ -14,7 +14,7 @@ sap.ui.define([
 
 		onInit: function (oEvent) {
 			//	this._UserID = sap.ushell.Container.getService("UserInfo").getId();
-			//	this._UserID = "PURCHASE1";
+			//	this._UserID = "PURCHASE2";
 			this._UserID = "COCKPIT2_1";
 
 			var that = this;
@@ -82,7 +82,7 @@ sap.ui.define([
 		},
 
 		RefreshMasterList: function () {
-			debugger;
+
 			var that = this;
 			var oModel = this.getView().getModel();
 
@@ -103,6 +103,8 @@ sap.ui.define([
 			var oApproveButton = this.getView().byId("btnApprove");
 			var oApproveReject = this.getView().byId("btnReject");
 
+			var oPoReleasebutton = this.getView().byId("btnApproveRelese");
+
 			var Pocount;
 			var txtPONOOB = this.getView().byId("objcmp");
 			oModel.read("/MyPOListSet", {
@@ -113,6 +115,12 @@ sap.ui.define([
 						if (Pocount > 0) {
 							oModelData.setData(odata);
 							oList1.setModel(oModelData);
+							if (oList1 !== undefined) {
+								/*	var SelectedItem1 = oList1.getSelectedItem();
+								SelectedItem1.setSelected(true);*/
+								oModelData.setData(odata);
+								oList1.setModel(oModelData);
+							}
 
 						} else {
 							oModelData.setData(odata);
@@ -126,10 +134,13 @@ sap.ui.define([
 							oReviewButton.setEnabled(false);
 							oApproveButton.setEnabled(false);
 							oApproveReject.setEnabled(false);
+							oPoReleasebutton.setEnabled(false);
 
 						}
 					} else if (oList2 !== undefined) {
 						if (Pocount > 0) {
+							/*	var SelectedItem2 = oList2.getSelectedItem();
+						SelectedItem2.setSelected(true);*/
 							oModelData.setData(odata);
 							oList2.setModel(oModelData);
 
@@ -146,6 +157,7 @@ sap.ui.define([
 							oReviewButton.setEnabled(false);
 							oApproveButton.setEnabled(false);
 							oApproveReject.setEnabled(false);
+							oPoReleasebutton.setEnabled(false);
 
 						}
 					}
@@ -179,6 +191,24 @@ sap.ui.define([
 			var oApproveButton = this.getView().byId("btnApprove");
 			var oApproveReject = this.getView().byId("btnReject");
 
+			var txtPO_No = this.getView().byId("PurOrdNo");
+			var txtPODesc = this.getView().byId("PurOrdDesc");
+			var txtPurOrdInt = this.getView().byId("PurOrdInt");
+			var txtVendor = this.getView().byId("PurOrdVendor");
+			var txtPlant = this.getView().byId("idPlant");
+
+			var txtDocument_Type = this.getView().byId("PurDocType");
+			var txtDocumentDate = this.getView().byId("PurOrdDt");
+			var txtPurOrdSts = this.getView().byId("PurOrdSts");
+			var txtPossPOSts = this.getView().byId("PossPOSts");
+			var txtPO_Dept = this.getView().byId("objPrice");
+			var txtObjQuery = this.getView().byId("objQueryAttr");
+
+			var oQueryButton = this.getView().byId("btnQuery");
+			var oReviewButton = this.getView().byId("btnReview");
+			var oApproveButton = this.getView().byId("btnApprove");
+			var oApproveReject = this.getView().byId("btnReject");
+
 			if (oParameters.arguments.PO_No !== "" || oParameters.arguments.PO_No !== null) {
 
 				this.PO_No = oParameters.arguments.PO_No;
@@ -189,6 +219,7 @@ sap.ui.define([
 				var oList2 = sap.ui.getCore().byId("__xmlview0--listPO");
 
 				var sRead = "/SelectedPOContentSet(PoNo='" + this.PO_No + "')/$value";
+				var DocumentDate, day, month, year, final;
 
 				that.getMyPOList();
 
@@ -224,21 +255,83 @@ sap.ui.define([
 				oModel.read("/PurchaseOrderGeneralSet('" + this.PO_No + "')", {
 					success: function (odata, oResponse) {
 
-						txtPO_StatusObject.setText(oResponse.data.PO_Status);
+						txtPO_No.setText(oResponse.data.PO_No);
+						txtPODesc.setText(oResponse.data.PO_Description);
+						txtPurOrdInt.setText(oResponse.data.PO_Initiator);
+						txtVendor.setText(oResponse.data.Vendor);
+						txtPlant.setText(oResponse.data.Plant);
+						txtDocument_Type.setText(oResponse.data.Document_Type);
+						if (oResponse.data.Document_Date !== null) {
+							DocumentDate = oResponse.data.Document_Date;
+							year = DocumentDate.substring(0, 4);
+							month = DocumentDate.substring(4, 6);
+							day = DocumentDate.substring(6, 8);
 
-						if (txtPO_StatusObject.getText() === "In Query") {
+							final = day + "-" + month + "-" + year;
+							txtDocumentDate.setText(final);
+
+						} else {
+							txtDocumentDate.setText("");
+						}
+
+						txtPurOrdSts.setText(oResponse.data.PO_Status);
+						if (txtPurOrdSts.getText() == "In Query") {
 							oApproveButton.setEnabled(false);
 							oApproveReject.setEnabled(false);
-						} else if (txtPO_StatusObject.getText() === "In Approval") {
+						} else if (txtPurOrdSts.getText() == "In Approval") {
 							oApproveButton.setEnabled(true);
 							oApproveReject.setEnabled(true);
 						}
+
 					},
 
 					error: function (e) {
 						//	MessageBox.error("error");
 					}
 
+				});
+
+				var PO = this.getView().byId("objcmp").getTitle();
+
+				var oTable = this.getView().byId("tblComments");
+				var filters = [];
+
+				var oPO = new sap.ui.model.Filter("PO", "EQ", PO);
+				filters.push(oPO);
+
+				oModel.read("/POCommentsSet", {
+					filters: filters,
+					success: function (odata, oResponse) {
+
+						var oModelData = new sap.ui.model.json.JSONModel();
+						oModelData.setData(odata);
+						oTable.setModel(oModelData);
+
+					},
+					error: function () {
+						//	MessageBox.error("error");
+					}
+				});
+
+				var POHistory = this.getView().byId("objcmp").getTitle();
+				var oTableHistory = this.getView().byId("tblQueryHistory");
+				var filters = [];
+
+				var oPOH = new sap.ui.model.Filter("PO_NO", "EQ", POHistory);
+				filters.push(oPOH);
+
+				oModel.read("/POQueryHistorySet", {
+					filters: filters,
+					success: function (odata, oResponse) {
+
+						var oModelData = new sap.ui.model.json.JSONModel();
+						oModelData.setData(odata);
+						oTableHistory.setModel(oModelData);
+
+					},
+					error: function () {
+						//	MessageBox.error("error");
+					}
 				});
 
 			}
@@ -409,6 +502,14 @@ sap.ui.define([
 			var Title = "Purchase Order No: " + oPONo + " - Query";
 
 			var oTitle = this._oDialog.setTitle(Title);
+
+			cmbUser.setFilterFunction(function (sTerm, oItem) {
+				// A case-insensitive 'string contains' filter
+				var sItemText = oItem.getText().toLowerCase(),
+					sSearchTerm = sTerm.toLowerCase();
+
+				return sItemText.indexOf(sSearchTerm) > -1;
+			});
 
 		},
 		OnCancelQuery: function (oEvent) {
@@ -600,6 +701,7 @@ sap.ui.define([
 			},*/
 
 		getOpenReviewPOPUP: function (Dept) {
+
 			if (Dept === "REV1") {
 
 				if (!this._ReviewoDialog) {
@@ -658,6 +760,14 @@ sap.ui.define([
 				//	var oReview2 = sap.ui.getCore().byId("idReview2Comments");
 				//	oReview2.setValue(null);
 
+				inputReview2.setFilterFunction(function (sTerm, oItem) {
+					// A case-insensitive 'string contains' filter
+					var sItemText = oItem.getText().toLowerCase(),
+						sSearchTerm = sTerm.toLowerCase();
+
+					return sItemText.indexOf(sSearchTerm) > -1;
+				});
+
 			}
 		},
 
@@ -678,81 +788,117 @@ sap.ui.define([
 
 		},
 
-		_handleValueHelpReview2UserAssign: function (oEvent) {
+		SelectDialogPressPORelease: function (oEvent) {
 
-			var oModel = this.getView().getModel();
-			var oHelpUserAssign = this._valueHelpDialogUserAssign;
-			//	var sInputValueUser = oEvent.getSource();
+			var oButton = oEvent.getSource();
 
-			this.inputUserId = oEvent.getSource().getId();
-			// create value help dialog
-			if (!oHelpUserAssign) {
-				oHelpUserAssign = sap.ui.xmlfragment(
-					"POApproval.ZPOApproval.fragments.AssignUser", //id.fragments.file.name ---take id from manifest.json
-					this
+			if (!this._PressPOReleaseDialog) {
+				this._PressPOReleaseDialog = sap.ui.xmlfragment("POApproval.ZPOApproval.fragments.PORelease", this);
+				this._PressPOReleaseDialog.setModel(this.getView().getModel());
+			}
+
+			// toggle compact style
+			jQuery.sap.syncStyleClass("sapUiSizeCompact", this.getView(), this._PressPOReleaseDialog);
+			this._PressPOReleaseDialog.open();
+			var PoApprovalComments = sap.ui.getCore().byId("idCommentsPORelase");
+			PoApprovalComments.setValue(null);
+			//To get the Value In Title Of Dialog
+
+			var oPONo = this.getView().byId("objcmp").getTitle();
+			var TitleApprove = "Purchase Order No: " + oPONo + " - Approve";
+
+			var oTitle = this._PressPOReleaseDialog.setTitle(TitleApprove);
+
+		},
+		OnCancelPORelease: function (oEvent) {
+			this._PressPOReleaseDialog.close();
+			if (this._PressPOReleaseDialog) {
+				this._PressPOReleaseDialog.destroy();
+				this._PressPOReleaseDialog = null; // make it falsy so that it can be created next time
+			}
+
+		},
+
+		/*	_handleValueHelpReview2UserAssign: function (oEvent) {
+
+				var oModel = this.getView().getModel();
+				var oHelpUserAssign = this._valueHelpDialogUserAssign;
+				//	var sInputValueUser = oEvent.getSource();
+
+				this.inputUserId = oEvent.getSource().getId();
+				// create value help dialog
+				if (!oHelpUserAssign) {
+					oHelpUserAssign = sap.ui.xmlfragment(
+						"POApproval.ZPOApproval.fragments.AssignUser", //id.fragments.file.name ---take id from manifest.json
+						this
+					);
+
+					var filters = [];
+
+					var oUserName = new sap.ui.model.Filter("Bname", "EQ", this._UserID);
+					filters.push(oUserName);
+
+					oModel.read("/UserSearchSet", {
+						filters: filters,
+						success: function (odata, oResponse) {
+
+							var oModelDataUser = new sap.ui.model.json.JSONModel();
+							oModelDataUser.setData(odata);
+							oHelpUserAssign.setModel(oModelDataUser);
+						},
+						error: function () {
+							//	MessageBox.error("error");
+						},
+
+					});
+
+					this.getView().addDependent(oHelpUserAssign);
+
+				}
+
+				// create a filter for the binding
+				oHelpUserAssign.getBinding("items").filter([new sap.ui.model.Filter(
+					"NameFirst"
+					//	sap.ui.model.FilterOperator.Contains, sInputValueUser
+				)]);
+
+				// open value help dialog filtered by the input value
+				oHelpUserAssign.open();
+
+			},
+
+			_handleValueHelpSearchUserAssign: function (evt) {
+			
+				var sValueUser = evt.getParameter("value");
+				var oFilter = new sap.ui.model.Filter(
+					"NameFirst",
+					sap.ui.model.FilterOperator.Contains, sValueUser
 				);
+					var oFilter2 = new sap.ui.model.Filter(
+					"NameLast",
+					sap.ui.model.FilterOperator.Contains, sValueUser
+				);
+				evt.getSource().getBinding("items").filter([oFilter]);
+			},
+			_handleValueHelpCloseUserAssign: function (evt) {
 
-				var filters = [];
+				//	var	 inputUserId= oEvent.getSource().getId();
+				var oSelectedItem = evt.getParameter("selectedItem");
+				if (oSelectedItem.length) {
+					MessageToast.show("You have chosen " + oSelectedItem.map(function (oContext) {
+						return oContext.getObject().Bname;
+					}).join(", "));
+				}
+				evt.getSource().getBinding("items").filter([]);
 
-				var oUserName = new sap.ui.model.Filter("Bname", "EQ", this._UserID);
-				filters.push(oUserName);
+				if (oSelectedItem) {
+					//var UserInput = this.getView().byId(this.inputUserId);
+					var UserInput = sap.ui.getCore().byId(this.inputUserId);
+					UserInput.setValue(oSelectedItem.getTitle());
+				}
+				evt.getSource().getBinding("items").filter([]);
 
-				oModel.read("/UserSearchSet", {
-					filters: filters,
-					success: function (odata, oResponse) {
-
-						var oModelDataUser = new sap.ui.model.json.JSONModel();
-						oModelDataUser.setData(odata);
-						oHelpUserAssign.setModel(oModelDataUser);
-					},
-					error: function () {
-						//	MessageBox.error("error");
-					},
-
-				});
-
-				this.getView().addDependent(oHelpUserAssign);
-
-			}
-
-			// create a filter for the binding
-			oHelpUserAssign.getBinding("items").filter([new sap.ui.model.Filter(
-				"NameFirst"
-				//	sap.ui.model.FilterOperator.Contains, sInputValueUser
-			)]);
-
-			// open value help dialog filtered by the input value
-			oHelpUserAssign.open();
-
-		},
-
-		_handleValueHelpSearchUserAssign: function (evt) {
-			var sValueUser = evt.getParameter("value");
-			var oFilter = new sap.ui.model.Filter(
-				"NameFirst",
-				sap.ui.model.FilterOperator.Contains, sValueUser
-			);
-			evt.getSource().getBinding("items").filter([oFilter]);
-		},
-		_handleValueHelpCloseUserAssign: function (evt) {
-
-			//	var	 inputUserId= oEvent.getSource().getId();
-			var oSelectedItem = evt.getParameter("selectedItem");
-			if (oSelectedItem.length) {
-				MessageToast.show("You have chosen " + oSelectedItem.map(function (oContext) {
-					return oContext.getObject().Bname;
-				}).join(", "));
-			}
-			evt.getSource().getBinding("items").filter([]);
-
-			if (oSelectedItem) {
-				//var UserInput = this.getView().byId(this.inputUserId);
-				var UserInput = sap.ui.getCore().byId(this.inputUserId);
-				UserInput.setValue(oSelectedItem.getTitle());
-			}
-			evt.getSource().getBinding("items").filter([]);
-
-		},
+			},*/
 
 		GetClock: function () {
 			var result = "";
@@ -882,10 +1028,8 @@ sap.ui.define([
 		},
 
 		OnSubmitApproval: function (oEvent) {
-			debugger;
-			var that = this;
-			that.RefreshMasterList();
 
+			var that = this;
 			var oModel = this.getView().getModel();
 			var po = this.getView().byId("objcmp").getTitle();
 			var PoApprovalDate = that._GetCuurentDate();
@@ -910,11 +1054,150 @@ sap.ui.define([
 					"X-Requested-With": "X"
 				});
 
-					oModel.create("/UserApprovalSet", oItems, {
+				oModel.create("/UserApprovalSet", oItems, {
+					success: function (odata, oResponse) {
+
+						var smsg = "PO " + po + " has been Successfully Approved";
+						that.OnCancelApprove();
+						MessageBox.confirm(smsg, {
+							icon: sap.m.MessageBox.Icon.INFORMATION,
+							title: "Confirm",
+							actions: [sap.m.MessageBox.Action.OK],
+							onClose: function (sAction) {
+								if (sAction === "OK") {
+									that.RefreshCommentTable();
+
+									that.RefreshMasterList();
+									//	that.onReset();
+								}
+							}
+						});
+
+					},
+					error: function (oError) {
+						//	MessageBox.error("Error : " + oError);
+					}
+
+				});
+			}
+
+		},
+
+		OnSubmitPORelease: function (oEvent) {
+
+			var that = this;
+			var oModel = this.getView().getModel();
+			var po = this.getView().byId("objcmp").getTitle();
+			var PoReleaseDate = that._GetCuurentDate();
+			var PoReleaseTime = that.GetClock24hrs();
+			var PoStatus = "REL";
+			var PReleaseComments = sap.ui.getCore().byId("idCommentsPORelase");
+
+			if (PReleaseComments.getValue() === "") {
+				MessageToast.show("Please Fill Comments");
+				return false;
+			} else {
+				var oItems = {};
+				var that = this;
+				oItems.PO = po;
+				oItems.UserName = this._UserID;
+				oItems.POApprovalDate = PoReleaseDate;
+				oItems.POApprovalTime = PoReleaseTime;
+				oItems.POStatus = PoStatus;
+				oItems.POApprovalComments = PReleaseComments.getValue();
+
+				oModel.setHeaders({
+					"X-Requested-With": "X"
+				});
+
+				oModel.create("/UserApprovalSet", oItems, {
+					success: function (odata, oResponse) {
+
+						var smsg = "PO " + po + " has been Successfully Approved";
+						that.OnCancelPORelease();
+						MessageBox.confirm(smsg, {
+							icon: sap.m.MessageBox.Icon.INFORMATION,
+							title: "Confirm",
+							actions: [sap.m.MessageBox.Action.OK],
+							onClose: function (sAction) {
+								if (sAction === "OK") {
+									that.RefreshCommentTable();
+
+									that.RefreshMasterList();
+									//	that.onReset();
+								}
+							}
+						});
+
+					},
+					error: function (oError) {
+						//	MessageBox.error("Error : " + oError);
+					}
+
+				});
+			}
+
+		},
+
+		OnSubmitReject: function (oEvent) {
+
+			var that = this;
+			var oModel = this.getView().getModel();
+
+			var oButton = oEvent.getSource();
+			var Dept = "";
+			oModel.read("/ApproverDeptSet('" + this._UserID + "')", {
+				success: function (odata, oResponse) {
+					Dept = odata.Dept;
+
+					that.OnRejectReview2POPUP(Dept);
+					//	that.OnCancelReviewPOPUP(Dept);
+				},
+
+				error: function (e) {
+					//	MessageBox.error("error");
+				}
+
+			});
+
+		},
+
+		OnRejectReview2POPUP: function (Dept) {
+
+			var oModel = this.getView().getModel();
+			var that = this;
+			var po = this.getView().byId("objcmp").getTitle();
+
+			var PoRejectionDate = that._GetCuurentDate();
+			var PorejectionTime = that.GetClock24hrs();
+			//	var PoRejetionTime = that.GetClockChanngeFormat();
+			var PoStatus = "R";
+			var PoStatusReview2 = "REJ_REV";
+			var PoRejectionComments = sap.ui.getCore().byId("idRejectionComments");
+			if (Dept === "PUR" || Dept === "REV1") {
+
+				if (PoRejectionComments.getValue() === "") {
+					MessageToast.show(" Please Fill the Comments ");
+					return false;
+				} else {
+					var oItems = {};
+					oItems.PO = po;
+					oItems.UserName = this._UserID;
+					oItems.PORejectionDate = PoRejectionDate;
+					oItems.PORejectionTime = PorejectionTime;
+					oItems.POStatus = PoStatus;
+					oItems.PORejectionComments = PoRejectionComments.getValue();
+
+					oModel.setHeaders({
+						"X-Requested-With": "X"
+					});
+
+					oModel.create("/UserRejectionSet", oItems, {
+
 						success: function (odata, oResponse) {
 
-							var smsg = "PO " + po + " has been Successfully Approved";
-							that.OnCancelApprove();
+							var smsg = "PO " + po + " has been Successfully Rejected";
+							that.OnCancelReject();
 							MessageBox.confirm(smsg, {
 								icon: sap.m.MessageBox.Icon.INFORMATION,
 								title: "Confirm",
@@ -922,7 +1205,6 @@ sap.ui.define([
 								onClose: function (sAction) {
 									if (sAction === "OK") {
 										that.RefreshCommentTable();
-
 										that.RefreshMasterList();
 										//	that.onReset();
 									}
@@ -935,17 +1217,62 @@ sap.ui.define([
 						}
 
 					});
+				}
+
+			}
+			if (Dept === "REV2") {
+
+				if (PoRejectionComments.getValue() === "") {
+					MessageToast.show(" Please Fill the Comments ");
+					return false;
+				} else {
+					var oItems = {};
+					oItems.PO = po;
+					oItems.UserName = this._UserID;
+					oItems.PORejectionDate = PoRejectionDate;
+					oItems.PORejectionTime = PorejectionTime;
+					oItems.POStatus = PoStatusReview2;
+					oItems.PORejectionComments = PoRejectionComments.getValue();
+
+					oModel.setHeaders({
+						"X-Requested-With": "X"
+					});
+
+					oModel.create("/UserRejectionSet", oItems, {
+
+						success: function (odata, oResponse) {
+
+							var smsg = "PO " + po + " has been Successfully Rejected";
+							that.OnCancelReject();
+							MessageBox.confirm(smsg, {
+								icon: sap.m.MessageBox.Icon.INFORMATION,
+								title: "Confirm",
+								actions: [sap.m.MessageBox.Action.OK],
+								onClose: function (sAction) {
+									if (sAction === "OK") {
+										that.RefreshCommentTable();
+										that.RefreshMasterList();
+										//	that.onReset();
+									}
+								}
+							});
+
+						},
+						error: function (oError) {
+							//	MessageBox.error("Error : " + oError);
+						}
+
+					});
+				}
 			}
 
 		},
-
-		OnSubmitReject: function (oEvent) {
+		/*	OnSubmitReject: function (oEvent) {
 
 			var oModel = this.getView().getModel();
 			var that = this;
 			var po = this.getView().byId("objcmp").getTitle();
-			//	var UserNme = sap.ushell.Container.getService("UserInfo").getId();
-			//	var UserNme = "PURCHASE1";
+
 			var PoRejectionDate = that._GetCuurentDate();
 			var PorejectionTime = that.GetClock24hrs();
 			//	var PoRejetionTime = that.GetClockChanngeFormat();
@@ -998,7 +1325,7 @@ sap.ui.define([
 				});
 			}
 
-		},
+		},*/
 
 		OnSubmitQuery: function (oEvent) {
 
@@ -1064,13 +1391,6 @@ sap.ui.define([
 			}
 
 		},
-
-		/*	onHideButton: function () {
-				var oApproveButton = this.getView().byId("btnApprove");
-				var oApproveReject = this.getView().byId("btnReject");
-				oApproveButton.setVisible(false);
-				oApproveReject.setVisible(false);
-			},*/
 
 		onReset: function () {
 
@@ -1149,9 +1469,8 @@ sap.ui.define([
 		},
 
 		OnSubmitReview2: function (oEvent) {
-
+			debugger;
 			var that = this;
-
 			var oModel = this.getView().getModel();
 
 			var po = this.getView().byId("objcmp").getTitle();
@@ -1162,15 +1481,6 @@ sap.ui.define([
 				MessageToast.show("Please Fill Comments");
 				return false;
 			} else {
-				var that = this;
-				var oItems = {};
-				oItems.POApprovalComments = PoReview2Comments.getValue();
-				oModel.create("/UserApprovalSet", oItems, {
-					success: function (odata, oResponse) {},
-					error: function (oError) {
-						//MessageBox.error("Error : " + oError);
-					}
-				});
 				var oItemsTable = [];
 
 				var Review2Table = sap.ui.getCore().byId("tblUserReview2");
@@ -1178,45 +1488,93 @@ sap.ui.define([
 				var aItems = Review2Table.getItems();
 
 				if (aItems.length > 0) {
+					//	var oTable = Review2Table.getModel().getProperty("/results");
+					//	var oModel = sap.ui.getCore().getModel();
+					var batchChanges = [];
+						oModel.setUseBatch(true);
+
 					for (var i = 0; i < aItems.length; i++) {
 						var BNAME = oModelItems.getProperty("Bname", aItems[i].getBindingContext());
 						var FIRSTNAME = oModelItems.getProperty("FirstName", aItems[i].getBindingContext());
 						var LASTNAME = oModelItems.getProperty("LastName", aItems[i].getBindingContext());
-
+						oItemsTable.PO = po;
 						oItemsTable.BName = BNAME;
 						oItemsTable.Name_First = FIRSTNAME;
 						oItemsTable.Name_Last = LASTNAME;
-						oModel.setHeaders({
-							"X-Requested-With": "X"
-						});
+					
+						batchChanges.push(oModel.create("/POFinanceReleaseApproversSet", "POST", oItemsTable));
+						oModel.addBatchChangeOperations(batchChanges);
+							oModel.submitChanges();
 
-						oModel.create("/POFinanceReleaseApprovers", oItemsTable, {
-							success: function (odata, oResponse) {
-								if (i === aItems.length) {
-									var smsg = "PO " + po + " has been Reviewed";
-									that.OnCancelReview();
-									MessageBox.confirm(smsg, {
-										icon: sap.m.MessageBox.Icon.INFORMATION,
-										title: "Confirm",
-										actions: [sap.m.MessageBox.Action.OK],
-										onClose: function (sAction) {
-											if (sAction === "OK") {
-												that.RefreshMasterList();
-												//	that.onReset();
-											}
-										}
-									});
-
-								}
-
-							},
-							error: function (oError) {
-								//MessageBox.error("Error : " + oError);
-							}
-
-						});
 					}
+				
+				
+					/*		for (var i = 0; i < aItems.length; i++) {
+									oModel.setUseBatch(true);
+								var BNAME = oModelItems.getProperty("Bname", aItems[i].getBindingContext());
+								var FIRSTNAME = oModelItems.getProperty("FirstName", aItems[i].getBindingContext());
+								var LASTNAME = oModelItems.getProperty("LastName", aItems[i].getBindingContext());
+								oItemsTable.PO  = po;
+								oItemsTable.BName = BNAME;
+								oItemsTable.Name_First = FIRSTNAME;
+								oItemsTable.Name_Last = LASTNAME;
+							
+
+								oModel.create("/POFinanceReleaseApproversSet", oItemsTable, {
+									success: function (odata, oResponse) {
+										MessageBox.information("success");
+									/*	if (i === aItems.length) {
+											var smsg = "PO " + po + " has been Reviewed";
+											MessageBox.confirm(smsg, {
+												icon: sap.m.MessageBox.Icon.INFORMATION,
+												title: "Confirm",
+												actions: [sap.m.MessageBox.Action.OK],
+												onClose: function (sAction) {
+													if (sAction === "OK") {
+														that.RefreshMasterList();
+														//	that.onReset();
+													}
+												}
+											});
+
+										}
+
+									},
+									error: function (oError) {
+										//MessageBox.error("Error : " + oError);
+									}
+
+								});
+							}*/
+					//	oModel.submitBatch();
 				}
+
+			/*	var oItems = {};
+				oItems.POApprovalComments = PoReview2Comments.getValue();
+				oModel.create("/UserApprovalSet", oItems, {
+					success: function (odata, oResponse) {
+
+						var smsg = "PO " + po + " has been Reviewed";
+						that.OnSubmitReview2();
+						MessageBox.confirm(smsg, {
+							icon: sap.m.MessageBox.Icon.INFORMATION,
+							title: "Confirm",
+							actions: [sap.m.MessageBox.Action.OK],
+							onClose: function (sAction) {
+								if (sAction === "OK") {
+
+									that.RefreshMasterList();
+									//	that.onReset();
+								}
+							}
+						});
+
+					},
+					error: function (oError) {
+						//MessageBox.error("Error : " + oError);
+					}
+
+				});*/
 
 			}
 
@@ -1273,19 +1631,18 @@ sap.ui.define([
 					} else if (odata.Dept === "REV1" && Pocount <= 0) {
 						//oQueryButton.setVisible(true);
 						oReviewbButton.setVisible(true);
-							oApproveButton.setVisible(false);
+						oApproveButton.setVisible(false);
 						oRejectButton.setVisible(false);
 
 						oQueryButton.setEnabled(false);
 						oReviewbButton.setEnabled(false);
 
-					
 					} else if (odata.Dept === "REV2" && Pocount <= 0) {
 						//oQueryButton.setVisible(true);
 						oReviewbButton.setVisible(true);
 						oApproveButton.setVisible(false);
-						oRejectButton.setVisible(false);
-							oApproveButtonRelease.setVisible(true);
+						oRejectButton.setVisible(true);
+						oApproveButtonRelease.setVisible(true);
 
 						oQueryButton.setEnabled(false);
 						oReviewbButton.setEnabled(false);
@@ -1453,6 +1810,7 @@ sap.ui.define([
 		},
 
 		handleSelectionFinish: function (oEvent) {
+			debugger;
 
 			var oModelItems = new sap.ui.model.json.JSONModel();
 			var otableUser = sap.ui.getCore().byId("tblUserReview2");

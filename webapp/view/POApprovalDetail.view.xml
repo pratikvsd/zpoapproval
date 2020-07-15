@@ -165,7 +165,7 @@
 						<Button text="Query" id="btnQuery" icon="sap-icon://sys-help" type="Emphasized" press="handleSelectDialogPress"></Button>
 						<Button text="Review" visible="false" id="btnReview" type="Emphasized" press="handleDialogPressReview"></Button>
 						<Button text="Approve" id="btnApprove" icon="sap-icon://accept" press="SelectDialogPressApprove" type="Accept"/>
-						<Button visible="false" text="Approve For Release" id="btnApproveRelese" icon="sap-icon://accept" press="SelectDialogPressApprove" type="Accept"/>
+						<Button text="PO Release" visible="false"  id="btnApproveRelese" icon="sap-icon://accept" press="SelectDialogPressPORelease" type="Accept"/>
 						<Button text="Reject" class="rejetbtn" id="btnReject" icon="sap-icon://decline" press="SelectDialogPressReject" type="Reject"/>
 					</OverflowToolbar>
 				</footer>

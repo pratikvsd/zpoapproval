@@ -16,36 +16,14 @@
 							</f:FormElement>
 							<f:FormElement label="To User">
 								<f:fields>
-<!--									<TableSelectDialog id="tablQuery" noDataText="No Products Found" title="Select Product" search="handleSearch" confirm="handleClose"
-										cancel="handleClose" items="{ path : '/results', sorter : { path : 'Bname'} }">
-										<ColumnListItem>
-											<cells>
-												<Text title="{Bname}"/>
-												<Text text="{NameFirst}"/>
-											</cells>
-										</ColumnListItem>
-										<columns>
-											<Column width="12em">
-												<header>
-													<Text text="User Id"/>
-												</header>
-											</Column>
-											<Column minScreenWidth="Tablet" demandPopin="true">
-												<header>
-													<Text text="User Name"/>
-												</header>
-											</Column>
-										</columns>
-									</TableSelectDialog>
--->										<ComboBox id="cmbUser" items="{ path: '/results', sorter: { path: 'Bname' } }">
+									<!--	<ComboBox id="cmbUser" items="{ path: '/results', sorter: { path: 'Bname' } }">
 										<core:Item key="{Bname}" text="{NameFirst} {NameLast}"/>
+									</ComboBox>-->
+									<ComboBox id="cmbUser">
+										<core:Item key="FIN_RELEASE1" text="FIN RELEASE1"/>
+										<core:Item key="FIN_RELEASE2" text="FIN RELEASE2"/>
+										<core:Item key="FIN_RELEASE3" text="FIN RELEASE3"/>
 									</ComboBox>
-									<!--<Input type="Text" id="QUserid" valueHelpRequest="_handleValueHelpUser" suggestionItems="{path:'/results'}" textFormatMode="Key" width="90%"
-										showSuggestion="true" showValueHelp="true" valueHelpOnly="true">
-										<suggestionItems>
-											<core:Item text="{NameFirst} {NameLast}" key="{Bname}"/>
-										</suggestionItems>
-									</Input>-->
 								</f:fields>
 							</f:FormElement>
 						</f:formElements>
