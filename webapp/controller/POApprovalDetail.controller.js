@@ -1470,84 +1470,37 @@ sap.ui.define([
 
 		OnSubmitReview2: function (oEvent) {
 			debugger;
-			var that = this;
+			var oTable = sap.ui.getCore().byId("tblUserReview2");
 			var oModel = this.getView().getModel();
-
+			var oModelItems = oTable.getModel();
 			var po = this.getView().byId("objcmp").getTitle();
 
-			var PoReview2Comments = sap.ui.getCore().byId("idReview2Comments");
+			oModel.setUseBatch(true);
+			var aItems = oTable.getItems();
 
-			if (PoReview2Comments.getValue() === "") {
-				MessageToast.show("Please Fill Comments");
-				return false;
-			} else {
-				var oItemsTable = [];
+			for (var i = 0; i < aItems.length; i++) {
+				var BNAME = oModelItems.getProperty("Bname", aItems[i].getBindingContext());
+				var FIRSTNAME = oModelItems.getProperty("FirstName", aItems[i].getBindingContext());
+				var LASTNAME = oModelItems.getProperty("LastName", aItems[i].getBindingContext());
 
-				var Review2Table = sap.ui.getCore().byId("tblUserReview2");
-				var oModelItems = Review2Table.getModel();
-				var aItems = Review2Table.getItems();
+				var batchChanges = [];
+				var oItemsTable = {};
+				oItemsTable.PO = po;
+				oItemsTable.BName = BNAME;
+				oItemsTable.Name_First = FIRSTNAME;
+				oItemsTable.Name_Last = LASTNAME;
 
-				if (aItems.length > 0) {
-					//	var oTable = Review2Table.getModel().getProperty("/results");
-					//	var oModel = sap.ui.getCore().getModel();
-					var batchChanges = [];
-						oModel.setUseBatch(true);
+				batchChanges.push(oModel.createBatchOperation("POFinanceReleaseApproversSet", "POST", oItemsTable));
+				oModel.addBatchChangeOperations(batchChanges);
 
-					for (var i = 0; i < aItems.length; i++) {
-						var BNAME = oModelItems.getProperty("Bname", aItems[i].getBindingContext());
-						var FIRSTNAME = oModelItems.getProperty("FirstName", aItems[i].getBindingContext());
-						var LASTNAME = oModelItems.getProperty("LastName", aItems[i].getBindingContext());
-						oItemsTable.PO = po;
-						oItemsTable.BName = BNAME;
-						oItemsTable.Name_First = FIRSTNAME;
-						oItemsTable.Name_Last = LASTNAME;
+				oModel.submitBatch(function (data) {
 					
-						batchChanges.push(oModel.create("/POFinanceReleaseApproversSet", "POST", oItemsTable));
-						oModel.addBatchChangeOperations(batchChanges);
-							oModel.submitChanges();
+				}, function (err) {
+					
+				});
 
-					}
-				
-				
-					/*		for (var i = 0; i < aItems.length; i++) {
-									oModel.setUseBatch(true);
-								var BNAME = oModelItems.getProperty("Bname", aItems[i].getBindingContext());
-								var FIRSTNAME = oModelItems.getProperty("FirstName", aItems[i].getBindingContext());
-								var LASTNAME = oModelItems.getProperty("LastName", aItems[i].getBindingContext());
-								oItemsTable.PO  = po;
-								oItemsTable.BName = BNAME;
-								oItemsTable.Name_First = FIRSTNAME;
-								oItemsTable.Name_Last = LASTNAME;
-							
+			}
 
-								oModel.create("/POFinanceReleaseApproversSet", oItemsTable, {
-									success: function (odata, oResponse) {
-										MessageBox.information("success");
-									/*	if (i === aItems.length) {
-											var smsg = "PO " + po + " has been Reviewed";
-											MessageBox.confirm(smsg, {
-												icon: sap.m.MessageBox.Icon.INFORMATION,
-												title: "Confirm",
-												actions: [sap.m.MessageBox.Action.OK],
-												onClose: function (sAction) {
-													if (sAction === "OK") {
-														that.RefreshMasterList();
-														//	that.onReset();
-													}
-												}
-											});
-
-										}
-
-									},
-									error: function (oError) {
-										//MessageBox.error("Error : " + oError);
-									}
-
-								});
-							}*/
-					//	oModel.submitBatch();
-				}
 
 			/*	var oItems = {};
 				oItems.POApprovalComments = PoReview2Comments.getValue();
@@ -1575,8 +1528,6 @@ sap.ui.define([
 					}
 
 				});*/
-
-			}
 
 		},
 
@@ -1810,7 +1761,6 @@ sap.ui.define([
 		},
 
 		handleSelectionFinish: function (oEvent) {
-			debugger;
 
 			var oModelItems = new sap.ui.model.json.JSONModel();
 			var otableUser = sap.ui.getCore().byId("tblUserReview2");
