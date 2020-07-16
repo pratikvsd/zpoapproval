@@ -19,9 +19,9 @@ sap.ui.define([
 		onInit: function () {
 			var that = this;
 			
-			//this._UserID = sap.ushell.Container.getService("UserInfo").getId();
-		//	this._UserID = "PURCHASE1";
-			this._UserID = "COCKPIT2_1";
+			this._UserID = sap.ushell.Container.getService("UserInfo").getId();
+		//	this._UserID = "PURCHASE3";
+	//		this._UserID = "COCKPIT2_1";
 			
 			var oModel = new sap.ui.model.odata.ODataModel("/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/", true);
 			this.getView().setModel(oModel);

@@ -19,7 +19,6 @@
 				"type": "OData",
 				"settings": {
 					"localUri": "localService/metadata.xml"
-				
 				}
 			}
 		}
