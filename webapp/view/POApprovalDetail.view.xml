@@ -12,7 +12,7 @@
 						</statuses>
 						<ObjectAttribute id="objcmp" class="objectattr"/>
 					</ObjectHeader>
-					<IconTabBar id="idIconTabBarNoIcons" select="handleIconTabBarSelect" expanded="true" class="sapUiResponsiveContentPadding">
+					<IconTabBar id="idIconTabBarNoIcons" expandable="false" select="handleIconTabBarSelect" expanded="true" class="sapUiResponsiveContentPadding">
 						<items>
 							<IconTabFilter icon="sap-icon://pdf-attachment" text="Cover Note">
 								<core:HTML id="idFrame"/>
