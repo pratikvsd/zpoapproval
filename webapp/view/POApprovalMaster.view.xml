@@ -23,7 +23,7 @@
 									</secondStatus>
 									<attributes>
 										<ObjectAttribute text="{Document_Type}"/>
-										<ObjectAttribute text="{Plant} "/>
+										<ObjectAttribute text="{Plant}" class="PlantAttributes"/>
 										<ObjectAttribute text="{Vendor} "/>
 									</attributes>
 								</ObjectListItem>

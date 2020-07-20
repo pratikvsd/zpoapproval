@@ -13,8 +13,8 @@ sap.ui.define([
 	return Controller.extend("POApproval.ZPOApproval.controller.POApprovalDetail", {
 
 		onInit: function (oEvent) {
-				this._UserID = sap.ushell.Container.getService("UserInfo").getId();
-		//	this._UserID = "PURCHASE3";
+			//	this._UserID = sap.ushell.Container.getService("UserInfo").getId();
+			this._UserID = "PURCHASE1";
 		//		this._UserID = "COCKPIT2_1";
 
 			var that = this;
@@ -253,26 +253,9 @@ sap.ui.define([
 				oModel.read(sRead, {
 					success: function (oData, oResponse) {
 
-						if (oList1 !== undefined) {
-							var aItems1 = oList1.getItems();
-							if (aItems1.length <= 0) {
-								oModel.setData(null);
-							} else {
 								var pdfURL = oResponse.requestUri;
 								oHtml.setContent("<iframe src=" + pdfURL + " width='100%' height='600px'></iframe>");
-							}
-
-						} else if (oList2 !== undefined) {
-
-							var aItems2 = oList2.getItems();
-							if (aItems2.length <= 0) {
-								oModel.setData(null);
-							} else {
-								var pdfURL = oResponse.requestUri;
-								oHtml.setContent("<iframe src=" + pdfURL + " width='100%' height='600px'></iframe>");
-							}
-						}
-
+					
 					},
 					error: function () {
 						//	MessageBox.error("Cover Note Read Failed");

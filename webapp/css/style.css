@@ -246,3 +246,20 @@ sapMBtnInner.sapMBtnReject:hover
     float: none;
     position: relative;
 }
+/*For Plant in Master List*/
+
+.sapMObjLAttrDiv{
+	width: 80% !important;
+}
+.sapMObjLStatusDiv {
+    box-sizing: border-box;
+    display: inline-block;
+    width: 100%;
+    text-align: right;
+    vertical-align: top;
+}
+
+.sapMObjLAttrRow {
+    
+    padding-top: 0px  !important;
+}

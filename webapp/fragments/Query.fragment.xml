@@ -21,8 +21,8 @@
 									</ComboBox>-->
 									<ComboBox id="cmbUser">
 										<core:Item key="FIN_RELEASE1" text="FIN RELEASE1"/>
-										<core:Item key="FIN_RELEASE2" text="FIN RELEASE2"/>
-										<core:Item key="FIN_RELEASE3" text="FIN RELEASE3"/>
+										<core:Item key="FIN_RELEASE2" text="FIN_RELEASE2"/>
+										<core:Item key="FIN_RELEASE3" text="FIN_RELEASE3"/>
 									</ComboBox>
 								</f:fields>
 							</f:FormElement>

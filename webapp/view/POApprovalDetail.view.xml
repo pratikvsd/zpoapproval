@@ -68,7 +68,7 @@
 											<cells>
 												<Text text="{Query_From}"/>
 												<Text text="{Query_To}"/>
-												<Text text="{Query_Date} {Query_Time}"/>
+												<Text text="{Query_Date}  {Query_Time}"/>
 												<!--<Text text="{Query_Time}"/>-->
 												<Text text="{Query_Status}"/>
 												<Text text="{Query}"/>
