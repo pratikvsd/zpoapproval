@@ -52,5 +52,6 @@
     }
   ],
   "sendWelcomeFileRedirect": true,
-  "authenticationMethod": "none"
+  "authenticationMethod": "none",
+  "headerWhiteList":["slug"]
 }

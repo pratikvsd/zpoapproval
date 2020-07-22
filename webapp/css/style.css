@@ -263,3 +263,8 @@ sapMBtnInner.sapMBtnReject:hover
     
     padding-top: 0px  !important;
 }
+
+.sapUiFup {
+    display: inline-block;
+    background-color: #e24040;
+}

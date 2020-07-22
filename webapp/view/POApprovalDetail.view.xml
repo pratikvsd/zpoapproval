@@ -12,7 +12,8 @@
 						</statuses>
 						<ObjectAttribute id="objcmp" class="objectattr"/>
 					</ObjectHeader>
-					<IconTabBar id="idIconTabBarNoIcons" expandable="false" select="handleIconTabBarSelect" expanded="true" class="sapUiResponsiveContentPadding">
+					<IconTabBar id="idIconTabBarNoIcons" expandable="false" select="handleIconTabBarSelect" expanded="true"
+						class="sapUiResponsiveContentPadding">
 						<items>
 							<IconTabFilter icon="sap-icon://pdf-attachment" text="Cover Note">
 								<core:HTML id="idFrame"/>
@@ -21,22 +22,27 @@
 								<UploadCollection id="UploadCollection" maximumFilenameLength="55" maximumFileSize="10" multiple="true" showSeparators="All"
 									change="onChange" fileDeleted="onFileDeleted" filenameLengthExceed="onFilenameLengthExceed" fileRenamed="onFileRenamed"
 									fileSizeExceed="onFileSizeExceed" selectionChange="onSelectionChange" typeMissmatch="onTypeMissmatch" uploadComplete="onUploadComplete"
-									beforeUploadStarts="onBeforeUploadStarts" uploadTerminated="onUploadTerminated"
-									items="{path : 'oModelAttachment>/items', templateShareable : 'true'}" numberOfAttachmentsText="Uploaded (8)" mode="SingleSelectMaster">
+									beforeUploadStarts="onBeforeUploadStarts" uploadTerminated="onUploadTerminated" items="{path:'/POAttachmentsSet' }"
+									uploadUrl="/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/POAttachmentsSet" mode="SingleSelectMaster">
 									<toolbar>
 										<OverflowToolbar id="myId">
 											<Title id="attachmentTitle"/>
 											<ToolbarSpacer/>
 											<Button id="deleteSelectedButton" text="Delete" press="onDeleteSelectedItems" enabled="false" visible="false" type="Transparent"></Button>
 											<ToggleButton id="selectAllButton" text="Select all" press="onSelectAllPress" enabled="false" visible="false" type="Transparent"></ToggleButton>
-											<UploadCollectionToolbarPlaceholder></UploadCollectionToolbarPlaceholder>
+											<UploadCollectionToolbarPlaceholder id="idupload"></UploadCollectionToolbarPlaceholder>
 										</OverflowToolbar>
 									</toolbar>
 									<items>
-										<UploadCollectionItem documentId="{oModelAttachment>documentId}" fileName="{oModelAttachment>fileName}"
-											mimeType="{oModelAttachment>mimeType}" thumbnailUrl="{oModelAttachment>thumbnailUrl}" url="{oModelAttachment>url}"
-											enableEdit="{oModelAttachment>enableEdit}" enableDelete="{oModelAttachment>enableDelete}" visibleDelete="{oModelAttachment>visibleDelete}"
-											visibleEdit="{oModelAttachment>visibleEdit}" selected="{oModelAttachment>selected}"></UploadCollectionItem>
+										<UploadCollectionItem documentId="{DocumentID}" fileName="{DocumentName}" mimeType="{mimeType}" thumbnailUrl="{thumbnailUrl}"
+											url="{FilePath}">
+											<attributes>
+												<ObjectAttribute title="{DocumentDate}" text="{DocumentTime}" press="onAttributePress"/>
+											</attributes>
+											<statuses>
+												<ObjectStatus title="{DocumentURL}"/>
+											</statuses>
+										</UploadCollectionItem>
 									</items>
 								</UploadCollection>
 							</IconTabFilter>
@@ -68,7 +74,7 @@
 											<cells>
 												<Text text="{Query_From}"/>
 												<Text text="{Query_To}"/>
-												<Text text="{Query_Date}  {Query_Time}"/>
+												<Text text="{Query_Date} {Query_Time}"/>
 												<!--<Text text="{Query_Time}"/>-->
 												<Text text="{Query_Status}"/>
 												<Text text="{Query}"/>
@@ -118,7 +124,7 @@
 												columnsL="2" columnsM="2" singleContainerFullSize="false">
 												<f:content>
 													<Text id="txtPONO" visible="false"/>
-													<Label text="PO No" id="lblPUrOrNo" />
+													<Label text="PO No" id="lblPUrOrNo"/>
 													<Text id="PurOrdNo"/>
 													<Label text="PO Description"/>
 													<Text id="PurOrdDesc"/>
@@ -163,9 +169,9 @@
 					<OverflowToolbar>
 						<ToolbarSpacer/>
 						<Button text="Query" id="btnQuery" icon="sap-icon://sys-help" type="Emphasized" press="handleSelectDialogPress"></Button>
-						<Button text="Review" visible="false" id="btnReview" type="Emphasized" press="handleDialogPressReview"></Button>
+						<Button text="Review" visible="true" id="btnReview" type="Emphasized" press="handleDialogPressReview"></Button>
 						<Button text="Approve" id="btnApprove" icon="sap-icon://accept" press="SelectDialogPressApprove" type="Accept"/>
-						<Button text="PO Release" visible="false"  id="btnApproveRelese" icon="sap-icon://accept" press="SelectDialogPressPORelease" type="Accept"/>
+						<Button text="PO Release" visible="false" id="btnApproveRelese" icon="sap-icon://accept" press="SelectDialogPressPORelease" type="Accept"/>
 						<Button text="Reject" class="rejetbtn" id="btnReject" icon="sap-icon://decline" press="SelectDialogPressReject" type="Reject"/>
 					</OverflowToolbar>
 				</footer>

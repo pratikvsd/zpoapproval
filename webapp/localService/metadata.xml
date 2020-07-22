@@ -34,6 +34,15 @@
 					sap:sortable="false" sap:filterable="false"/><Property Name="Name_First" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="First name"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Name_Last" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Last name" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/></EntityType>
+			<EntityType Name="POAttachments" m:HasStream="true" sap:content-version="1">
+				<Key><PropertyRef Name="PO_NO"/></Key><Property Name="PO_NO" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/><Property Name="DocumentID" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/><Property Name="DocumentName" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/><Property Name="FilePath" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/><Property Name="DocumentDate" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/><Property Name="DocumentTime" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/><Property Name="DocumentURL" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
+					sap:filterable="false"/></EntityType>
 			<EntityType Name="MyPOList" sap:content-version="1">
 				<Key><PropertyRef Name="UserID"/></Key><Property Name="UserID" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="PO Approver" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="PO_No" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Purchasing Doc."
@@ -67,8 +76,8 @@
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
 			<EntityType Name="POQuery" sap:content-version="1">
 				<Key><PropertyRef Name="PO_NO"/></Key><Property Name="PO_NO" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Purchasing Doc."
-					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Query_From" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="VECV Purchase Order Query From"
-					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Query_To" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="VECV Purchase Order Query To"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Query_From" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="PO Approver"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Query_To" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="PO Approver"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Query_Date" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="VECV PO Query Date"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Query_Time" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="VECV Purchase Order Time"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Query_Text" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="PO Query" sap:updatable="false"
@@ -80,7 +89,7 @@
 					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Query_Date" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="VECV PO Query Date"
 					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Query_Time" Type="Edm.String" Nullable="false" MaxLength="8" sap:unicode="false" sap:label="VECV Purchase Order Time"
 					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Query_Status" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false"
-					sap:label="VECV Purchase Order Query Status" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Query" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="PO Query" sap:creatable="false"
+					sap:label="VECV Purchase Order Query Text" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Query" Type="Edm.String" Nullable="false" sap:unicode="false" sap:label="PO Query" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
 			<EntityType Name="ApproverDept" sap:content-version="1">
 				<Key><PropertyRef Name="UserID"/></Key><Property Name="UserID" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
@@ -91,7 +100,8 @@
 				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="UserRejectionSet" EntityType="ZVECV_PURCHASE_ORDER_APPROVAL_SRV.UserRejection" sap:creatable="false" sap:updatable="false"
 				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="UserSearchSet" EntityType="ZVECV_PURCHASE_ORDER_APPROVAL_SRV.UserSearch" sap:creatable="false" sap:updatable="false"
 				sap:deletable="false" sap:pageable="false" sap:content-version="1"/><EntitySet Name="POFinanceReleaseApproversSet" EntityType="ZVECV_PURCHASE_ORDER_APPROVAL_SRV.POFinanceReleaseApprovers"
-				sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="MyPOListSet" EntityType="ZVECV_PURCHASE_ORDER_APPROVAL_SRV.MyPOList" sap:updatable="false" sap:deletable="false"
+				sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="POAttachmentsSet" EntityType="ZVECV_PURCHASE_ORDER_APPROVAL_SRV.POAttachments" sap:creatable="false" sap:updatable="false"
+				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="MyPOListSet" EntityType="ZVECV_PURCHASE_ORDER_APPROVAL_SRV.MyPOList" sap:updatable="false" sap:deletable="false"
 				sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="PurchaseOrderGeneralSet" EntityType="ZVECV_PURCHASE_ORDER_APPROVAL_SRV.PurchaseOrderGeneral" sap:creatable="false"
 				sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="POCommentsSet" EntityType="ZVECV_PURCHASE_ORDER_APPROVAL_SRV.POComments" sap:creatable="false" sap:updatable="false"
 				sap:deletable="false" sap:pageable="false" sap:addressable="false" sap:content-version="1"/><EntitySet Name="POQuerySet" EntityType="ZVECV_PURCHASE_ORDER_APPROVAL_SRV.POQuery" sap:creatable="false" sap:updatable="false"

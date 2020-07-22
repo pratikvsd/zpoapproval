@@ -13,14 +13,17 @@ sap.ui.define([
 	return Controller.extend("POApproval.ZPOApproval.controller.POApprovalDetail", {
 
 		onInit: function (oEvent) {
-		//		this._UserID = sap.ushell.Container.getService("UserInfo").getId();
-			this._UserID = " COCKPIT2_1";
+			//	this._UserID = sap.ushell.Container.getService("UserInfo").getId();
+			this._UserID = "PURCHASE1";
 			//		this._UserID = "COCKPIT2_1";
 
 			var that = this;
 
 			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			this._oRouter.getRoute("POApprovalDetail").attachPatternMatched(this._onEditMatched, this);
+
+			var oUploadCollection = this.getView().byId('UploadCollection');
+			oUploadCollection.setUploadUrl("/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/POAttachmentsSet");
 
 			var oModel = new sap.ui.model.odata.ODataModel("/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/", true);
 			this.getView().setModel(oModel);
@@ -127,7 +130,6 @@ sap.ui.define([
 							oModelData.setData(odata);
 							oList1.setModel(oModelData);
 							that.RefreshGeralTab();
-						
 
 						} else {
 							oModelData.setData(odata);
@@ -154,10 +156,10 @@ sap.ui.define([
 						}
 					} else if (oList2 !== undefined) {
 						if (Pocount > 0) {
-							
+
 							oModelData.setData(odata);
 							oList2.setModel(oModelData);
-								that.RefreshGeralTab();
+							that.RefreshGeralTab();
 
 						} else {
 
@@ -340,6 +342,21 @@ sap.ui.define([
 					}
 				});
 
+				var Attachments = this.getView().byId("UploadCollection");
+				oModel.read("/POAttachmentsSet", {
+					filters: filters,
+					success: function (odata, oResponse) {
+
+						var oModelData = new sap.ui.model.json.JSONModel();
+						oModelData.setData(odata);
+						Attachments.setModel(oModelData);
+
+					},
+					error: function () {
+						//	MessageBox.error("error");
+					}
+				});
+
 			}
 
 		},
@@ -452,45 +469,95 @@ sap.ui.define([
 
 		//Upload Attachments
 		onUploadComplete: function (oEvent) {
-			var oData = this.getView().byId("UploadCollection").getModel("oModelAttachment").getData();
-			var aItems = jQuery.extend(true, {}, oData).items;
-			var oItem = {};
-			var sUploadedFile = oEvent.getParameter("files")[0].fileName;
+		//	var PO = this.getView().byId("objcmp").getTitle();
+		
+			  this.getView().getModel().refresh();
+
+		/*	var sUploadedFile = oEvent.getParameter("files")[0].fileName;
 			// at the moment parameter fileName is not set in IE9
 			if (!sUploadedFile) {
 				var aUploadedFile = (oEvent.getParameters().getSource().getProperty("value")).split(/\" "/);
 				sUploadedFile = aUploadedFile[0];
 			}
-			oItem = {
-				"documentId": jQuery.now().toString(), // generate Id,
-				"fileName": sUploadedFile,
-				"mimeType": "",
-				"thumbnailUrl": "",
-				"url": "",
+			var oItems = {};
+			var that = this;
+			oItems.PO_NO = PO;
+			oItems.DocumentID = jQuery.now().toString(); // generate Id,
+			oItems.DocumentName = sUploadedFile;
+			oItems.FilePath = "C:\Users\VSD\Downloads";
+			oItems.DocumentDate = that._GetCuurentDate();
+			oItems.DocumentTime = that.GetClock24hrs();
+			oItems.DocumentURL = "sap-icon://pdf-attachment";*/
 
-			};
-
-			aItems.unshift(oItem);
-			this.getView().byId("UploadCollection").getModel("oModelAttachment").setData({
+			/*	aItems.unshift(oItems);
+			this.getView().byId("UploadCollection").getModel().setData({
 				"items": aItems
-			});
+			});*/
+
+			/*	oModel.create("/POAttachmentsSet", oItems, {
+					success: function (odata, oResponse) {
+
+					},
+					error: function (oError) {
+						//	MessageBox.error("Error : " + oError);
+					}
+
+				});*/
+
 			// Sets the text to the label
 			this.getView().byId("attachmentTitle").setText(this.getAttachmentTitleText());
 			// delay the success message for to notice onChange message
 			setTimeout(function () {
-				MessageToast.show("UploadComplete event triggered.");
+				//		MessageToast.show("UploadComplete event triggered.");
 			}, 4000);
 		},
 
 		// Before Upload Attachments
 		onBeforeUploadStarts: function (oEvent) {
 			// Header Slug
+		
 			var oCustomerHeaderSlug = new sap.m.UploadCollectionParameter({
 				name: "slug",
 				value: oEvent.getParameter("fileName")
 			});
 			oEvent.getParameters().addHeaderParameter(oCustomerHeaderSlug);
-			MessageToast.show("BeforeUploadStarts event triggered.");
+
+			var oModel = this.getView().getModel();
+			oModel.refreshSecurityToken();
+			var oHeaders = oModel.oHeaders;
+
+			var sToken = oHeaders['x-csrf-token'];
+			var oCustomerHeaderToken = new sap.m.UploadCollectionParameter({
+
+				name: "x-csrf-token",
+
+				value: sToken
+
+			});
+			oEvent.getParameters().addHeaderParameter(oCustomerHeaderToken);
+		/*	var PO = this.getView().byId("objcmp").getTitle();
+			var oModel = this.getView().getModel();
+
+			var oItems = {};
+			var that = this;
+			oItems.PO_NO = PO;
+			oItems.DocumentID = jQuery.now().toString(); // generate Id,
+			oItems.DocumentName = oCustomerHeaderSlug.getValue();
+			oItems.FilePath = "C:\Users\VSD\Downloads";
+			oItems.DocumentDate = that._GetCuurentDate();
+			oItems.DocumentTime = that.GetClock24hrs();
+			oItems.DocumentURL = "sap-icon://pdf-attachment";
+			oModel.create("/POAttachmentsSet", oItems, {
+				success: function (odata, oResponse) {
+
+				},
+				error: function (oError) {
+					//	MessageBox.error("Error : " + oError);
+				}
+
+			});*/
+
+			//	MessageToast.show("BeforeUploadStarts event triggered.");
 		},
 
 		onUploadTerminated: function (oEvent) {
@@ -1611,7 +1678,7 @@ sap.ui.define([
 		},
 
 		getUserDeptByUserID: function (UserId) {
-			debugger;
+
 			var filters = [];
 			var Pocount;
 			var oUserID = new sap.ui.model.Filter("UserID", "EQ", UserId);
@@ -1632,29 +1699,29 @@ sap.ui.define([
 			var oQueryButton = this.getView().byId("btnQuery");
 			var oReviewbButton = this.getView().byId("btnReview");
 			var oApproveButton = this.getView().byId("btnApprove");
-
-			var oApproveButtonRelease = this.getView().byId("btnApproveRelese");
 			var oRejectButton = this.getView().byId("btnReject");
+			var oApproveButtonRelease = this.getView().byId("btnApproveRelese");
 
 			oModel.read("/ApproverDeptSet('" + UserId + "')", {
 				success: function (odata, oResponse) {
 
 					if (odata.Dept === "PUR" && Pocount <= 0) {
 						oQueryButton.setEnabled(false);
-						oReviewbButton.setVisible(false);
-
 						oApproveButton.setEnabled(false);
 						oRejectButton.setEnabled(false);
+
+						oReviewbButton.setVisible(false);
+						//	oApproveButtonRelease.setVisible(false);
 
 						oApproveButton.setVisible(true);
 						oRejectButton.setVisible(true);
 
 					} else if (odata.Dept === "PUR" && Pocount > 0) {
 						oQueryButton.setEnabled(true);
-						oReviewbButton.setVisible(false);
-
 						oApproveButton.setEnabled(true);
 						oRejectButton.setEnabled(true);
+
+						oReviewbButton.setVisible(false);
 
 						oApproveButton.setVisible(true);
 						oRejectButton.setVisible(true);
