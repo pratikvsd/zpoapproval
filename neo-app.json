@@ -53,5 +53,5 @@
   ],
   "sendWelcomeFileRedirect": true,
   "authenticationMethod": "none",
-  "headerWhiteList":["slug"]
+  "headerWhiteList":["slug","PO_NO","x-csrf-token"]
 }

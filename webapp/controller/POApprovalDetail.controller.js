@@ -13,8 +13,8 @@ sap.ui.define([
 	return Controller.extend("POApproval.ZPOApproval.controller.POApprovalDetail", {
 
 		onInit: function (oEvent) {
-			//	this._UserID = sap.ushell.Container.getService("UserInfo").getId();
-			this._UserID = "PURCHASE1";
+				this._UserID = sap.ushell.Container.getService("UserInfo").getId();
+			//this._UserID = "PURCHASE1";
 			//		this._UserID = "COCKPIT2_1";
 
 			var that = this;
@@ -250,7 +250,6 @@ sap.ui.define([
 
 				oModel.read(sRead, {
 					success: function (oData, oResponse) {
-
 						var pdfURL = oResponse.requestUri;
 						oHtml.setContent("<iframe src=" + pdfURL + " width='100%' height='600px'></iframe>");
 
@@ -346,7 +345,6 @@ sap.ui.define([
 				oModel.read("/POAttachmentsSet", {
 					filters: filters,
 					success: function (odata, oResponse) {
-
 						var oModelData = new sap.ui.model.json.JSONModel();
 						oModelData.setData(odata);
 						Attachments.setModel(oModelData);
@@ -514,6 +512,8 @@ sap.ui.define([
 
 		// Before Upload Attachments
 		onBeforeUploadStarts: function (oEvent) {
+			debugger;
+			var PO = this.getView().byId("objcmp").getTitle();
 			// Header Slug
 		
 			var oCustomerHeaderSlug = new sap.m.UploadCollectionParameter({
@@ -521,6 +521,12 @@ sap.ui.define([
 				value: oEvent.getParameter("fileName")
 			});
 			oEvent.getParameters().addHeaderParameter(oCustomerHeaderSlug);
+			
+			var oCustomerHeaderPONo = new sap.m.UploadCollectionParameter({
+				name: "PO_NO",
+				value: PO
+			});
+			oEvent.getParameters().addHeaderParameter(oCustomerHeaderPONo);
 
 			var oModel = this.getView().getModel();
 			oModel.refreshSecurityToken();
@@ -528,13 +534,11 @@ sap.ui.define([
 
 			var sToken = oHeaders['x-csrf-token'];
 			var oCustomerHeaderToken = new sap.m.UploadCollectionParameter({
-
 				name: "x-csrf-token",
-
 				value: sToken
-
 			});
 			oEvent.getParameters().addHeaderParameter(oCustomerHeaderToken);
+		
 		/*	var PO = this.getView().byId("objcmp").getTitle();
 			var oModel = this.getView().getModel();
 
