@@ -12,7 +12,7 @@
 				</subHeader>
 				<content>
 					<Label id="lblUser_dept" type="text" visible="false"/>
-						<List items="{path:'/results'}" noDataText="No PO for Approval" id="listPO" mode="SingleSelectMaster" selectionChange="onSelectionChange">
+						<List items="{path:'/results'}"  noDataText="No PO for Approval" id="listPO"  includeItemInSelection="true" mode="SingleSelectMaster" selectionChange="onSelectionChange">
 							<items>
 								<ObjectListItem title="{PO_No}" type="Active" press="onListItemPress" number="{PO_Amount}" numberUnit="{PO_Currency}">
 									<firstStatus>

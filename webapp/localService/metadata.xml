@@ -42,7 +42,8 @@
 					sap:filterable="false"/><Property Name="DocumentDate" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
 					sap:filterable="false"/><Property Name="DocumentTime" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
 					sap:filterable="false"/><Property Name="DocumentURL" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
-					sap:filterable="false"/></EntityType>
+					sap:filterable="false"/><Property Name="MimeType" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/></EntityType>
 			<EntityType Name="MyPOList" sap:content-version="1">
 				<Key><PropertyRef Name="UserID"/></Key><Property Name="UserID" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="PO Approver" sap:creatable="false"
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="PO_No" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Purchasing Doc."

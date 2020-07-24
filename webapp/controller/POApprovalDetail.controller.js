@@ -13,8 +13,8 @@ sap.ui.define([
 	return Controller.extend("POApproval.ZPOApproval.controller.POApprovalDetail", {
 
 		onInit: function (oEvent) {
-				this._UserID = sap.ushell.Container.getService("UserInfo").getId();
-			//this._UserID = "PURCHASE1";
+		//		this._UserID = sap.ushell.Container.getService("UserInfo").getId();
+			this._UserID = "PURCHASE1";
 			//		this._UserID = "COCKPIT2_1";
 
 			var that = this;
@@ -85,13 +85,13 @@ sap.ui.define([
 		},
 
 		RefreshMasterList: function () {
-
+			debugger;
 			var that = this;
 			var oModel = this.getView().getModel();
 
 			var oList1 = sap.ui.getCore().byId("__xmlview1--listPO");
 			var oList2 = sap.ui.getCore().byId("__xmlview0--listPO");
-
+		
 			var filters = [];
 
 			var oUserID = new sap.ui.model.Filter("UserID", "EQ", this._UserID);
@@ -156,9 +156,10 @@ sap.ui.define([
 						}
 					} else if (oList2 !== undefined) {
 						if (Pocount > 0) {
-
+							
 							oModelData.setData(odata);
 							oList2.setModel(oModelData);
+							
 							that.RefreshGeralTab();
 
 						} else {
