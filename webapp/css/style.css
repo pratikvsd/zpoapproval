@@ -268,3 +268,7 @@ sapMBtnInner.sapMBtnReject:hover
     display: inline-block;
     background-color: #e24040;
 }
+
+.sapMUCSeparator {
+    display: none;
+}

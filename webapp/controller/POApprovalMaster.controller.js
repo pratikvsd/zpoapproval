@@ -5,8 +5,8 @@ sap.ui.define([
 	'sap/m/MessageToast',
 	"sap/m/MessageBox",
 	'sap/ui/model/json/JSONModel',
-		"sap/ui/core/routing/History"
-], function (Controller, Formatter, Filter, MessageToast, MessageBox, JSONModel,History) {
+	"sap/ui/core/routing/History"
+], function (Controller, Formatter, Filter, MessageToast, MessageBox, JSONModel, History) {
 	"use strict";
 
 	return Controller.extend("POApproval.ZPOApproval.controller.POApprovalMaster", {
@@ -18,11 +18,10 @@ sap.ui.define([
 		 */
 		onInit: function () {
 			var that = this;
-			
+
 		//	this._UserID = sap.ushell.Container.getService("UserInfo").getId();
-			this._UserID = "PURCHASE1";
-	//		this._UserID = "COCKPIT2_1";
-			
+			this._UserID = "PURCHASE2";
+
 			var oModel = new sap.ui.model.odata.ODataModel("/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/", true);
 			this.getView().setModel(oModel);
 
@@ -30,18 +29,14 @@ sap.ui.define([
 			var filters = [];
 
 			var oUserID = new sap.ui.model.Filter("UserID", "EQ", this._UserID);
-			var oUser_dept = this.getView().byId("lblUser_dept");
 			filters.push(oUserID);
 
 			oModel.read("/MyPOListSet", {
 				filters: filters,
 				success: function (odata, oResponse) {
-					var aItems = oList.getItems();
 					var oModelData = new sap.ui.model.json.JSONModel();
 					oModelData.setData(odata);
 					oList.setModel(oModelData);
-					//oUser_dept.setText(odata.results[0].User_Dept);
-
 				},
 				error: function () {
 					//	MessageBox.error("error");
@@ -55,60 +50,25 @@ sap.ui.define([
 				if (aItems.length > 0) {
 					oEvent.getSource().getItems()[0].setSelected(true);
 					oEvent.getSource().getItems()[0].firePress();
-				} 
-
-				//	oEvent.getSource().getItems()[0].getSelectedItem(true);
-
-				/*var OUserDept = oUser_dept.getText();
-				var oQueryButton1 = sap.ui.getCore().byId("__xmlview1--btnQuery");
-				var oQueryButton2 = sap.ui.getCore().byId("__xmlview0--btnQuery");
-
-				var oReviewbButton1 = sap.ui.getCore().byId("__xmlview1--btnReview");
-				var oReviewbButton2 = sap.ui.getCore().byId("__xmlview0--btnReview");
-
-				var oApproveButton1 = sap.ui.getCore().byId("__xmlview1--btnApprove");
-				var oApproveButton2 = sap.ui.getCore().byId("__xmlview0--btnApprove");
-
-				var oRejectButton1 = sap.ui.getCore().byId("__xmlview1--btnReject");
-				var oRejectButton2 = sap.ui.getCore().byId("__xmlview0--btnReject");
-*/
-				/*	if (OUserDept === "PUR") {
-						if (oReviewbButton1 !== undefined && oApproveButton1 !== undefined && oRejectButton1 !== undefined) {
-							oReviewbButton1.setVisible(false);
-							oApproveButton1.setVisible(true);
-							oRejectButton1.setVisible(true);
-						} else if (oReviewbButton2 !== undefined && oApproveButton2 !== undefined && oRejectButton2 !== undefined) {
-							oReviewbButton2.setVisible(false);
-							oApproveButton2.setVisible(true);
-							oRejectButton2.setVisible(true);
-						}
-					} else if (OUserDept === "REV1" || OUserDept === "REV2") {
-						if (oReviewbButton1 !== undefined && oApproveButton1 !== undefined && oRejectButton1 !== undefined) {
-							oReviewbButton1.setVisible(true);
-							oApproveButton1.setVisible(false);
-							oRejectButton1.setVisible(false);
-						} else if (oReviewbButton2 !== undefined && oApproveButton2 !== undefined && oRejectButton2 !== undefined) {
-							oReviewbButton2.setVisible(true);
-							oApproveButton2.setVisible(false);
-							oRejectButton2.setVisible(false);
-						}
-					}*/
-
+				}
 			});
 
 		},
-		
-	
 
 		onSelectionChange: function (e) {
-			var oList = this.getView().byId("listPO");
 
 			var PoNo = e.getParameters().listItem.getTitle();
-			//	var oViewID = this.getView().byId("listPO").sId;
+			var PoStatus = e.getParameters().listItem.getFirstStatus().getText();
+			var postatus = "";
+			if (PoStatus === "In Query") {
+				postatus = "Q";
+			} else if (PoStatus === "In Approval") {
+				postatus = "A";
+			}
 
 			this.getRouter().navTo("POApprovalDetail", {
 				PO_No: PoNo,
-				//	oViewID: oViewID
+				PO_Status: postatus
 			});
 
 			if (this._prevSelect) {
@@ -129,16 +89,16 @@ sap.ui.define([
 		onListItemPress: function (oEvent) {
 
 			var objEdit = oEvent.getSource().getBindingContext().getObject();
+			var postatus = "";
+			if (objEdit.PO_Status === "In Query") {
+				postatus = "Q";
+			} else if (objEdit.PO_Status === "In Approval") {
+				postatus = "A";
+			}
 			this.getRouter().navTo("POApprovalDetail", {
-				PO_No: objEdit.PO_No
+				PO_No: objEdit.PO_No,
+				PO_Status: postatus
 			});
-			/*	if (objEdit.PO_Status == "In Approval") {
-					oApproveButton.setVisible(true);
-					oApproveReject.setVisible(true);
-				} else if(objEdit.PO_Status == "In Query") {
-							oApproveButton.setVisible(false);
-					oApproveReject.setVisible(false);
-				}*/
 
 		},
 
@@ -156,12 +116,10 @@ sap.ui.define([
 
 		handleOpenDialog: function (oEvent) {
 
-			var oButton = oEvent.getSource();
 			if (!this._oDialogFilter) {
 				this._oDialogFilter = sap.ui.xmlfragment("POApproval.ZPOApproval.fragments.Filter", this);
 				this._oDialogFilter.setModel(this.getView().getModel());
 			}
-
 			// toggle compact style
 			jQuery.sap.syncStyleClass("sapUiSizeCompact", this.getView(), this._oDialogFilter);
 			this._oDialogFilter.open();
@@ -169,10 +127,7 @@ sap.ui.define([
 		},
 
 		handleConfirm: function (oEvent) {
-			var oModel = this.getView().getModel();
-			var that = this;
 			var query = oEvent.getSource().getSelectedFilterItems();
-			var oList = this.byId("listPO");
 			var oBinding = this.byId("listPO").getBinding("items");
 			if (query.length > 0) {
 				var oFilter = new sap.ui.model.Filter({
@@ -186,27 +141,7 @@ sap.ui.define([
 			}
 		},
 
-		
-
-		/*		handleConfirm: function (oEvent) {
-					var oView = this.getView();
-					var oList = oView.byId("listPO");
-					var mParams = oEvent.getParameters();
-					var oBinding = oList.getBinding("items");
-					var aFilters = [];
-					
-					for (var i = 0, l = mParams.filterItems.length; i < l; i++) {
-						var oItem = mParams.filterItems[i];
-						var aSplit = oItem.getKey().split("___");
-						var sPath = aSplit[0];
-						var vOperator = aSplit[1];
-						var vValue1 = aSplit[2];
-						var vValue2 = aSplit[3];
-						var oFilter = new sap.ui.model.Filter(sPath, vOperator, vValue1, vValue2);
-						aFilters.push(oFilter);
-					}
-					oBinding.filter(aFilters);
-				},*/
+	
 
 		/**
 		 * Similar to onAfterRendering, but this hook is invoked before the controller's View is re-rendered

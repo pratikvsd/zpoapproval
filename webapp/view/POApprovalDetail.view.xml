@@ -15,32 +15,34 @@
 					<IconTabBar id="idIconTabBarNoIcons" expandable="false" select="handleIconTabBarSelect" expanded="true"
 						class="sapUiResponsiveContentPadding">
 						<items>
-							<IconTabFilter icon="sap-icon://pdf-attachment" text="Cover Note">
+							<IconTabFilter icon="sap-icon://pdf-attachment" text="Cover Note" key="CoverNote">
 								<core:HTML id="idFrame"/>
 							</IconTabFilter>
 							<IconTabFilter text="Attachments" key="Attachments" icon="sap-icon://attachment">
-								<UploadCollection id="UploadCollection" maximumFilenameLength="55" maximumFileSize="10" multiple="true" showSeparators="All"
+								<UploadCollection id="UploadCollection" maximumFilenameLength="35" maximumFileSize="10" multiple="true" showSeparators="All"
 									change="onChange" fileDeleted="onFileDeleted" filenameLengthExceed="onFilenameLengthExceed" fileRenamed="onFileRenamed"
 									fileSizeExceed="onFileSizeExceed" selectionChange="onSelectionChange" typeMissmatch="onTypeMissmatch" uploadComplete="onUploadComplete"
-									beforeUploadStarts="onBeforeUploadStarts" uploadTerminated="onUploadTerminated" items="{path:'/POAttachmentsSet' }"
-									uploadUrl="/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/POAttachmentsSet" mode="SingleSelectMaster">
+									beforeUploadStarts="onBeforeUploadStarts" uploadTerminated="onUploadTerminated" items="{path:'/results'}"
+									uploadUrl="/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/POAttachmentsSet" mode="MultiSelect">
 									<toolbar>
 										<OverflowToolbar id="myId">
 											<Title id="attachmentTitle"/>
 											<ToolbarSpacer/>
 											<Button id="deleteSelectedButton" text="Delete" press="onDeleteSelectedItems" enabled="false" visible="false" type="Transparent"></Button>
 											<ToggleButton id="selectAllButton" text="Select all" press="onSelectAllPress" enabled="false" visible="false" type="Transparent"></ToggleButton>
+											<Title text="Attachment Repository: SAP DMS"/>
 											<UploadCollectionToolbarPlaceholder id="idupload"></UploadCollectionToolbarPlaceholder>
 										</OverflowToolbar>
 									</toolbar>
 									<items>
-										<UploadCollectionItem documentId="{DocumentID}" fileName="{DocumentName}" mimeType="{mimeType}" thumbnailUrl="{thumbnailUrl}"
-											url="{FilePath}">
+										<UploadCollectionItem documentId="{DocumentID}" fileName="{DocumentName}" mimeType="{MimeType}" thumbnailUrl="" url="{DocumentURL}"
+											visibleEdit="false" enableDelete="true">
 											<attributes>
-												<ObjectAttribute title="{DocumentDate}" text="{DocumentTime}" press="onAttributePress"/>
+												<ObjectAttribute active="true" visible="false" title="{AttachedByUserID}"/>
+												<ObjectAttribute active="true"  text="Uploaded By :{AttachedByUserName}" press="onAttributePress"/>
 											</attributes>
 											<statuses>
-												<ObjectStatus title="{DocumentURL}"/>
+												<ObjectStatus text="Uploaded On :{DocumentDate} {DocumentTime}"/>
 											</statuses>
 										</UploadCollectionItem>
 									</items>
@@ -169,10 +171,10 @@
 					<OverflowToolbar>
 						<ToolbarSpacer/>
 						<Button text="Query" id="btnQuery" icon="sap-icon://sys-help" type="Emphasized" press="handleSelectDialogPress"></Button>
-						<Button text="Review" visible="true" id="btnReview" type="Emphasized" press="handleDialogPressReview"></Button>
-						<Button text="Approve" id="btnApprove" icon="sap-icon://accept" press="SelectDialogPressApprove" type="Accept"/>
+						<Button text="Review" visible="false" id="btnReview" type="Emphasized" press="handleDialogPressReview"></Button>
+						<Button text="Approve" enabled="false" id="btnApprove" icon="sap-icon://accept" press="SelectDialogPressApprove" type="Accept"/>
 						<Button text="PO Release" visible="false" id="btnApproveRelese" icon="sap-icon://accept" press="SelectDialogPressPORelease" type="Accept"/>
-						<Button text="Reject" class="rejetbtn" id="btnReject" icon="sap-icon://decline" press="SelectDialogPressReject" type="Reject"/>
+						<Button text="Reject" class="rejetbtn" enabled="false" id="btnReject" icon="sap-icon://decline" press="SelectDialogPressReject" type="Reject"/>
 					</OverflowToolbar>
 				</footer>
 			</Page>

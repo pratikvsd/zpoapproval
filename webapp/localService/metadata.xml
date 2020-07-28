@@ -35,14 +35,15 @@
 					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Name_Last" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Last name" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/></EntityType>
 			<EntityType Name="POAttachments" m:HasStream="true" sap:content-version="1">
-				<Key><PropertyRef Name="PO_NO"/></Key><Property Name="PO_NO" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
-					sap:filterable="false"/><Property Name="DocumentID" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
-					sap:filterable="false"/><Property Name="DocumentName" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
-					sap:filterable="false"/><Property Name="FilePath" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
-					sap:filterable="false"/><Property Name="DocumentDate" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
-					sap:filterable="false"/><Property Name="DocumentTime" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
-					sap:filterable="false"/><Property Name="DocumentURL" Type="Edm.String" Nullable="false" sap:unicode="false" sap:updatable="false" sap:sortable="false"
-					sap:filterable="false"/><Property Name="MimeType" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+				<Key><PropertyRef Name="PO_NO"/></Key><Property Name="PO_NO" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="DocumentID" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="DocumentName" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="DocumentDate" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="DocumentTime" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="DocumentURL" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="MimeType" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="AttachedByUserID" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
+					sap:sortable="false" sap:filterable="false"/><Property Name="AttachedByUserName" Type="Edm.String" Nullable="false" sap:unicode="false" sap:creatable="false" sap:updatable="false"
 					sap:sortable="false" sap:filterable="false"/></EntityType>
 			<EntityType Name="MyPOList" sap:content-version="1">
 				<Key><PropertyRef Name="UserID"/></Key><Property Name="UserID" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="PO Approver" sap:creatable="false"
@@ -57,8 +58,8 @@
 					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="User_Dept" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false"
 					sap:label="VECV Purchase Order User Department" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/></EntityType>
 			<EntityType Name="PurchaseOrderGeneral" sap:content-version="1">
-				<Key><PropertyRef Name="UserID"/></Key><Property Name="UserID" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="PO Approver" sap:creatable="false"
-					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="PO_No" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Purchasing Doc."
+				<Key><PropertyRef Name="UserID"/><PropertyRef Name="PO_NO"/></Key><Property Name="UserID" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="PO Approver" sap:creatable="false"
+					sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="PO_NO" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="Purchasing Doc."
 					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Plant" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="VECV Purchase Order Plant"
 					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Vendor" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="VECV Purchase Order Vendor"
 					sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false"/><Property Name="Document_Type" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="VECV PO Type"

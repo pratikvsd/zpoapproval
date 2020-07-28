@@ -133,7 +133,7 @@
 				},
 				{
 					"name": "POApprovalDetail",
-					"pattern": "POApprovalDetail/{PO_No}",
+					"pattern": "POApprovalDetail/{PO_No}/POApprovalDetail1/{PO_Status}",
 					"target": [
 						"POApprovalMaster",
 						"POApprovalDetail"
