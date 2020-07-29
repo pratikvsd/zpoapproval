@@ -14,7 +14,7 @@ sap.ui.define([
 
 		onInit: function (oEvent) {
 		//	this._UserID = sap.ushell.Container.getService("UserInfo").getId();
-			this._UserID = "PURCHASE2";
+			this._UserID = "PURCHASE4";
 
 			var that = this;
 			var oModel = new sap.ui.model.odata.ODataModel("/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/", true);
@@ -197,58 +197,11 @@ sap.ui.define([
 
 		//Upload Attachments
 		onUploadComplete: function (oEvent) {
-			//	var PO = this.getView().byId("objcmp").getTitle();
-
-			var oModel = this.getView().getModel();
-			this.getView().getModel().refresh();
-			var Attachments = this.getView().byId("UploadCollection");
-
-			var POHistory = this.getView().byId("objcmp").getTitle();
-			var filters = [];
-
-			var oPOH = new sap.ui.model.Filter("PO_NO", "EQ", POHistory);
-			filters.push(oPOH);
-			var OUserId = this._UserID;
-			var oText, oDocumentDate, day, month, year, Hours, Minutes, Seconds, final;
-			debugger;
-			oModel.read("/POAttachmentsSet", {
-				filters: filters,
-				success: function (odata, oResponse) {
-					var oModelData = new sap.ui.model.json.JSONModel();
-					oModelData.setData(odata);
-					Attachments.setModel(oModelData);
-					Attachments.setBusy(false);
-
-					if (Attachments.getItems().length > 0) {
-						for (var i = 0; i < Attachments.getItems().length; i++) {
-							if (Attachments.getItems()[i].getAttributes()[0].getTitle() !== OUserId) {
-								Attachments.getItems()[i].setEnableDelete(false);
-							}
-							// Attachments.getItems()[i].getStatuses()[0].getText();
-							oText = Attachments.getItems()[i].getStatuses()[0].getText().substring(0, 13);
-							year = Attachments.getItems()[i].getStatuses()[0].getText().substring(13, 17);
-							month = Attachments.getItems()[i].getStatuses()[0].getText().substring(17, 19);
-							day = Attachments.getItems()[i].getStatuses()[0].getText().substring(19, 21);
-
-							Hours = Attachments.getItems()[i].getStatuses()[0].getText().substring(21, 24);
-							Minutes = Attachments.getItems()[i].getStatuses()[0].getText().substring(24, 26);
-							Seconds = Attachments.getItems()[i].getStatuses()[0].getText().substring(26, 28);
-
-							final = oText + day + "-" + month + "-" + year + " " + Hours + ":" + Minutes + ":" + Seconds;
-							Attachments.getItems()[i].getStatuses()[0].setText(final);
-						}
-					}
-
-				},
-				error: function () {
-					//	MessageBox.error("error");
-				}
-			});
-
-			// Sets the text to the label
-			this.getView().byId("attachmentTitle").setText(this.getAttachmentTitleText());
-			// delay the success message for to notice onChange message
-
+			//var oModel = this.getView().getModel();
+			//this.getView().getModel().refresh();
+			//var Attachments = this.getView().byId("UploadCollection");
+			var that=this;
+			that.OnPressAttachments();
 		},
 
 		// Before Upload Attachments
@@ -282,7 +235,7 @@ sap.ui.define([
 			});
 			oEvent.getParameters().addHeaderParameter(oCustomerHeaderToken);
 			Attachments.setBusy(true);
-
+	
 		},
 
 		onFilenameLengthExceed: function (oEvent) {
@@ -1273,7 +1226,7 @@ sap.ui.define([
 
 			oModel.read("/ApproverDeptSet('" + UserId + "')", {
 				success: function (odata, oResponse) {
-
+					debugger;
 					if (odata.Dept === "PUR" && Pocount <= 0) {
 						oQueryButton.setEnabled(false);
 						oApproveButton.setEnabled(false);
@@ -1424,16 +1377,17 @@ sap.ui.define([
 		OnPressAttachments: function () {
 			var oModel = this.getView().getModel();
 			var PONo = this.getView().byId("objcmp").getTitle();
-
+			var that=this;
 			var Attachments = this.getView().byId("UploadCollection");
 			var OUserId = this._UserID;
 			var oText, oDocumentDate, day, month, year, Hours, Minutes, Seconds, final;
-
+			var attachmentTitle = this.getView().byId("attachmentTitle");
 			var filters = [];
 
 			var oPOH = new sap.ui.model.Filter("PO_NO", "EQ", PONo);
 			filters.push(oPOH);
 			Attachments.setBusy(true);
+			attachmentTitle.setText(that.getAttachmentTitleText());
 			oModel.read("/POAttachmentsSet", {
 				filters: filters,
 				success: function (odata, oResponse) {
