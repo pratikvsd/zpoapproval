@@ -22,7 +22,7 @@
 								<UploadCollection id="UploadCollection" maximumFilenameLength="35" maximumFileSize="10" multiple="true" showSeparators="All"
 									change="onChange" fileDeleted="onFileDeleted" filenameLengthExceed="onFilenameLengthExceed" fileRenamed="onFileRenamed"
 									fileSizeExceed="onFileSizeExceed" selectionChange="onSelectionChange" typeMissmatch="onTypeMissmatch" uploadComplete="onUploadComplete"
-									beforeUploadStarts="onBeforeUploadStarts" uploadTerminated="onUploadTerminated" items="{path:'/results'}"
+									beforeUploadStarts="onBeforeUploadStarts"  items="{path:'/results'}"
 									uploadUrl="/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/POAttachmentsSet" mode="MultiSelect">
 									<toolbar>
 										<OverflowToolbar id="myId">
@@ -36,7 +36,7 @@
 									</toolbar>
 									<items>
 										<UploadCollectionItem documentId="{DocumentID}" fileName="{DocumentName}" mimeType="{MimeType}" thumbnailUrl="" url="{DocumentURL}"
-											visibleEdit="false" enableDelete="true">
+											visibleEdit="false" enableDelete="true" press="onPressFileName">
 											<attributes>
 												<ObjectAttribute active="true" visible="false" title="{AttachedByUserID}"/>
 												<ObjectAttribute active="true"  text="Uploaded By :{AttachedByUserName}" press="onAttributePress"/>
