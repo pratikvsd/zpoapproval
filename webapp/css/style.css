@@ -272,3 +272,12 @@ sapMBtnInner.sapMBtnReject:hover
 .sapMUCSeparator {
     display: none;
 }
+
+.sapMCb
+{
+	pointer-events: none;
+}
+.sapMCbBg
+{
+	background-color: #bfbfbf !important;
+}

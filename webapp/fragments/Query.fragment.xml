@@ -16,14 +16,19 @@
 							</f:FormElement>
 							<f:FormElement label="To User">
 								<f:fields>
-									<!--	<ComboBox id="cmbUser" items="{ path: '/results', sorter: { path: 'Bname' } }">
+									<Input id="cmbUser" type="Text"  showSuggestion="true" suggestionItems="{/results}" liveChange="OnSelectUser">
+										<suggestionItems>
+											<core:Item key="{Bname}" text="{NameFirst} {NameLast}"/>
+										</suggestionItems>
+									</Input>
+									<!--	<ComboBox id="cmbUser" items="{ path: '/results', sorter: { path: 'Bname' } }" selectionChange="OnSelectUser">
 										<core:Item key="{Bname}" text="{NameFirst} {NameLast}"/>
 									</ComboBox>-->
-									<ComboBox id="cmbUser">
+									<!--<ComboBox id="cmbUser">
 										<core:Item key="FIN_RELEASE1" text="FIN RELEASE1"/>
 										<core:Item key="FIN_RELEASE2" text="FIN_RELEASE2"/>
 										<core:Item key="FIN_RELEASE3" text="FIN_RELEASE3"/>
-									</ComboBox>
+									</ComboBox>-->
 								</f:fields>
 							</f:FormElement>
 						</f:formElements>

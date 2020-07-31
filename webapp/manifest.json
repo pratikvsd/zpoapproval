@@ -18,6 +18,7 @@
 				"uri": "/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/",
 				"type": "OData",
 				"settings": {
+					"odataVersion": "2.0",
 					"localUri": "localService/metadata.xml"
 				}
 			}

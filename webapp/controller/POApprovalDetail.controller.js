@@ -14,10 +14,13 @@ sap.ui.define([
 
 		onInit: function (oEvent) {
 		//	this._UserID = sap.ushell.Container.getService("UserInfo").getId();
-			this._UserID = "PURCHASE1";
-
+			this._UserID = "PURCHASE2";
+			var that = this;
 			var oModel = new sap.ui.model.odata.ODataModel("/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/", true);
 			this.getView().setModel(oModel);
+			if (this._UserID !== null) {
+				that.getUserDeptByUserID(this._UserID);
+			}
 
 			this._oRouter = sap.ui.core.UIComponent.getRouterFor(this);
 			this._oRouter.getRoute("POApprovalDetail").attachPatternMatched(this._onEditMatched, this);
@@ -27,16 +30,16 @@ sap.ui.define([
 
 		},
 
-		onBeforeRendering: function () {
+		/*	onBeforeRendering: function () {
 
-			var that = this;
-			var oModel = new sap.ui.model.odata.ODataModel("/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/", true);
-			this.getView().setModel(oModel);
+				var that = this;
+				var oModel = new sap.ui.model.odata.ODataModel("/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/", true);
+				this.getView().setModel(oModel);
 
-			if (this._UserID !== null) {
-				that.getUserDeptByUserID(this._UserID);
-			}
-		},
+				if (this._UserID !== null) {
+					that.getUserDeptByUserID(this._UserID);
+				}
+			},*/
 
 		getRouter: function () {
 			return sap.ui.core.UIComponent.getRouterFor(this);
@@ -158,6 +161,7 @@ sap.ui.define([
 		},
 
 		_onEditMatched: function (oEvent) {
+		
 			var that = this;
 			var oParameters = oEvent.getParameters();
 
@@ -190,7 +194,7 @@ sap.ui.define([
 		//Upload Attachments
 		onUploadComplete: function (oEvent) {
 			//var oModel = this.getView().getModel();
-		//	this.getView().getModel().refresh();
+			//	this.getView().getModel().refresh();
 			//var Attachments = this.getView().byId("UploadCollection");
 			var that = this;
 			that.OnPressAttachments();
@@ -232,43 +236,61 @@ sap.ui.define([
 
 		onFilenameLengthExceed: function (oEvent) {
 			var smsg = "Filename Length should be less than 35 characters";
-				MessageBox.confirm(smsg, {
-							icon: sap.m.MessageBox.Icon.INFORMATION,
-							title: "Confirm",
-							actions: [sap.m.MessageBox.Action.OK],
-							onClose: function (sAction) {
-								if (sAction === "OK") {
-								}
-							}
-						});
+			MessageBox.confirm(smsg, {
+				icon: sap.m.MessageBox.Icon.INFORMATION,
+				title: "Confirm",
+				actions: [sap.m.MessageBox.Action.OK],
+				onClose: function (sAction) {
+					if (sAction === "OK") {}
+				}
+			});
 		},
 
 		onPressFileName: function (oEvent) {
-			
-				var Attchments = this.getView().byId("UploadCollection");
+
+			var Attchments = this.getView().byId("UploadCollection");
+			var aSelectedItems = Attchments.getItems();
+			if (aSelectedItems) {
+				for (var i = 0; i < aSelectedItems.length; i++) {
+					if (Attchments.getItems()[i].getDocumentId() === oEvent.getSource().getDocumentId()) {
+						oEvent.getSource().setSelected(true);
+						Attchments.downloadItem(aSelectedItems[i], false);
+						break;
+					}
+				}
+			}
 		},
+
 	
 
 		//Delete Attachment
 		onFileDeleted: function (oEvent) {
-		
-			this.deleteItemById(oEvent.getParameter("documentId"));
-			MessageToast.show("FileDeleted event triggered.");
+
+			var documnentId = oEvent.getParameter("documentId");
+			this.deleteItemById(documnentId);
 		},
 
 		deleteItemById: function (sItemToDeleteId) {
-		var that = this;
-			var oModel = this.getView().getModel();
+
+			var that = this;
+			var oModel = new sap.ui.model.odata.v2.ODataModel("/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/", true);
+
 			var oPONo = this.getView().byId("objcmp").getTitle();
-			oModel.remove("/POAttachmentsSet(DocumentID='" + sItemToDeleteId + "')", {
+
+			oModel.setHeaders({
+				"X-Requested-With": "X",
+				"DocumentID": sItemToDeleteId
+			});
+
+			oModel.remove("/POAttachmentsSet('" + oPONo + "')", {
 
 				method: "DELETE",
 				success: function (odata, oResponse) {
-					MessageBox.success("Attachment Delete Successfully", {
+					MessageBox.success("Attachment Deleted Successfully", {
 						icon: sap.m.MessageBox.Icon.SUCCESS,
 						title: "Success",
 						onClose: function (oAction) {
-						that.OnPressAttachments();
+							that.OnPressAttachments();
 						}
 					});
 
@@ -278,9 +300,8 @@ sap.ui.define([
 					MessageBox.error("error");
 				}
 			});
-		
-	
-		//	this.getView().byId("attachmentTitle").setText(this.getAttachmentTitleText());
+
+			//	this.getView().byId("attachmentTitle").setText(this.getAttachmentTitleText());
 		},
 
 		getAttachmentTitleText: function () {
@@ -344,79 +365,91 @@ sap.ui.define([
 			}
 		},
 
-		_handleValueHelpUser: function (oEvent) {
+		/*	_handleValueHelpUser: function (oEvent) {
 
-			var oModel = this.getView().getModel();
-			var oHelpUser = this._valueHelpDialogUser;
-			var sInputValueUser = oEvent.getSource().getValue();
+				var oModel = this.getView().getModel();
+				var oHelpUser = this._valueHelpDialogUser;
+				var sInputValueUser = oEvent.getSource().getValue();
 
-			this.inputUserId = oEvent.getSource().getId();
-			// create value help dialog
-			if (!oHelpUser) {
-				oHelpUser = sap.ui.xmlfragment(
-					"POApproval.ZPOApproval.fragments.ToUser", //id.fragments.file.name ---take id from manifest.json
-					this
+				this.inputUserId = oEvent.getSource().getId();
+				// create value help dialog
+				if (!oHelpUser) {
+					oHelpUser = sap.ui.xmlfragment(
+						"POApproval.ZPOApproval.fragments.ToUser", //id.fragments.file.name ---take id from manifest.json
+						this
+					);
+
+					var filters = [];
+
+					var oUserName = new sap.ui.model.Filter("Bname", "EQ", this._UserID);
+					filters.push(oUserName);
+
+					oModel.read("/UserSearchSet", {
+						filters: filters,
+						success: function (odata, oResponse) {
+
+							var oModelDataUser = new sap.ui.model.json.JSONModel();
+							oModelDataUser.setData(odata);
+							oHelpUser.setModel(oModelDataUser);
+						},
+						error: function () {
+							//	MessageBox.error("error");
+						},
+
+					});
+
+					this.getView().addDependent(oHelpUser);
+
+				}
+
+				// create a filter for the binding
+				oHelpUser.getBinding("items").filter([new sap.ui.model.Filter(
+					"NameFirst",
+					sap.ui.model.FilterOperator.Contains, sInputValueUser
+				)]);
+
+				// open value help dialog filtered by the input value
+				oHelpUser.open(sInputValueUser);
+				var oQueryText = sap.ui.getCore().byId("QUserid");
+				oQueryText.setValue(null);
+				var PQueryComments = sap.ui.getCore().byId("idQuery");
+				PQueryComments.setValue(null);
+			},
+			_handleValueHelpSearchUser: function (evt) {
+				var sValueUser = evt.getParameter("value");
+				var oFilter = new sap.ui.model.Filter(
+					"NameFirst",
+					sap.ui.model.FilterOperator.Contains, sValueUser
 				);
+				evt.getSource().getBinding("items").filter([oFilter]);
+			},
+			_handleValueHelpCloseUser: function (evt) {
+				//	var	 inputUserId= oEvent.getSource().getId();
+				var oSelectedItem = evt.getParameter("selectedItem");
 
-				var filters = [];
-
-				var oUserName = new sap.ui.model.Filter("Bname", "EQ", this._UserID);
-				filters.push(oUserName);
-
-				oModel.read("/UserSearchSet", {
-					filters: filters,
-					success: function (odata, oResponse) {
-
-						var oModelDataUser = new sap.ui.model.json.JSONModel();
-						oModelDataUser.setData(odata);
-						oHelpUser.setModel(oModelDataUser);
-					},
-					error: function () {
-						//	MessageBox.error("error");
-					},
-
-				});
-
-				this.getView().addDependent(oHelpUser);
-
-			}
-
-			// create a filter for the binding
-			oHelpUser.getBinding("items").filter([new sap.ui.model.Filter(
-				"NameFirst",
-				sap.ui.model.FilterOperator.Contains, sInputValueUser
-			)]);
-
-			// open value help dialog filtered by the input value
-			oHelpUser.open(sInputValueUser);
-			var oQueryText = sap.ui.getCore().byId("QUserid");
-			oQueryText.setValue(null);
-			var PQueryComments = sap.ui.getCore().byId("idQuery");
-			PQueryComments.setValue(null);
-		},
-		_handleValueHelpSearchUser: function (evt) {
-			var sValueUser = evt.getParameter("value");
-			var oFilter = new sap.ui.model.Filter(
-				"NameFirst",
-				sap.ui.model.FilterOperator.Contains, sValueUser
-			);
-			evt.getSource().getBinding("items").filter([oFilter]);
-		},
-		_handleValueHelpCloseUser: function (evt) {
-			//	var	 inputUserId= oEvent.getSource().getId();
-			var oSelectedItem = evt.getParameter("selectedItem");
-
-			if (oSelectedItem) {
-				//var UserInput = this.getView().byId(this.inputUserId);
-				var UserInput = sap.ui.getCore().byId(this.inputUserId);
-				UserInput.setValue(oSelectedItem.getDescription());
-			}
-			evt.getSource().getBinding("items").filter([]);
-		},
+				if (oSelectedItem) {
+					//var UserInput = this.getView().byId(this.inputUserId);
+					var UserInput = sap.ui.getCore().byId(this.inputUserId);
+					UserInput.setValue(oSelectedItem.getDescription());
+				}
+				evt.getSource().getBinding("items").filter([]);
+			},*/
 		/*End Of Query Dialog*/
 
 		/*Open Approve Dialog*/
 		SelectDialogPressApprove: function (oEvent) {
+
+			var Attachments = this.getView().byId("UploadCollection");
+			var aSelectedItems = Attachments.getItems();
+			if (aSelectedItems.length > 0) {
+				for (var i = 0; i < aSelectedItems.length; i++) {
+					if (Attachments.getItems()[i].getSelected() === false) {
+						var smsg = "Please view all attachments before Approve/Reject";
+						MessageBox.information(smsg);
+						return false;
+					}
+				}
+			}
 
 			if (!this._PressoDialog) {
 				this._PressoDialog = sap.ui.xmlfragment("POApproval.ZPOApproval.fragments.Approve", this);
@@ -448,6 +481,18 @@ sap.ui.define([
 
 		SelectDialogPressReject: function (oEvent) {
 
+			var Attachments = this.getView().byId("UploadCollection");
+			var aSelectedItems = Attachments.getItems();
+			if (aSelectedItems.length > 0) {
+				for (var i = 0; i < aSelectedItems.length; i++) {
+					if (Attachments.getItems()[i].getSelected() === false) {
+						var smsg = "Please view all attachments before Approve/Reject";
+						MessageBox.information(smsg);
+						return false;
+					}
+				}
+			}
+
 			if (!this._RejectoDialog) {
 				this._RejectoDialog = sap.ui.xmlfragment("POApproval.ZPOApproval.fragments.Reject", this);
 				this._RejectoDialog.setModel(this.getView().getModel());
@@ -460,7 +505,7 @@ sap.ui.define([
 			PoRejectionComments.setValue(null);
 			var oPONo = this.getView().byId("objcmp").getTitle();
 			var Title = "Purchase Order No: " + oPONo + " - Reject";
-			 this._RejectoDialog.setTitle(Title);
+			this._RejectoDialog.setTitle(Title);
 
 		},
 
@@ -498,7 +543,7 @@ sap.ui.define([
 		},
 
 		getOpenReviewPOPUP: function (Dept) {
-				var oPONo = this.getView().byId("objcmp").getTitle();
+			var oPONo = this.getView().byId("objcmp").getTitle();
 
 			if (Dept === "REV1") {
 
@@ -515,7 +560,7 @@ sap.ui.define([
 				var PoReviewComments = sap.ui.getCore().byId("idReviewComments");
 				PoReviewComments.setValue(null);
 
-			 this._ReviewoDialog.setTitle(Title);
+				this._ReviewoDialog.setTitle(Title);
 
 			} else if (Dept === "REV2") {
 				var oModel = this.getView().getModel();
@@ -551,7 +596,7 @@ sap.ui.define([
 				});
 
 				var TitleNew = "Purchase Order No: " + oPONo + " - Review";
-				 this.oDialogReview2.setTitle(TitleNew);
+				this.oDialogReview2.setTitle(TitleNew);
 
 				//	var oReview2 = sap.ui.getCore().byId("idReview2Comments");
 				//	oReview2.setValue(null);
@@ -601,7 +646,7 @@ sap.ui.define([
 			var oPONo = this.getView().byId("objcmp").getTitle();
 			var TitleApprove = "Purchase Order No: " + oPONo + " - Approve";
 
-			 this._PressPOReleaseDialog.setTitle(TitleApprove);
+			this._PressPOReleaseDialog.setTitle(TitleApprove);
 
 		},
 		OnCancelPORelease: function (oEvent) {
@@ -707,7 +752,7 @@ sap.ui.define([
 								if (sAction === "OK") {
 
 									that.RefreshMasterList();
-								
+
 								}
 							}
 						});
@@ -762,7 +807,7 @@ sap.ui.define([
 								if (sAction === "OK") {
 
 									that.RefreshMasterList();
-								
+
 								}
 							}
 						});
@@ -844,7 +889,7 @@ sap.ui.define([
 									if (sAction === "OK") {
 
 										that.RefreshMasterList();
-										
+
 									}
 								}
 							});
@@ -890,7 +935,7 @@ sap.ui.define([
 									if (sAction === "OK") {
 
 										that.RefreshMasterList();
-									
+
 									}
 								}
 							});
@@ -970,8 +1015,6 @@ sap.ui.define([
 
 		},
 
-	
-
 		OnSubmitReview: function (oEvent) {
 
 			var that = this;
@@ -1013,7 +1056,7 @@ sap.ui.define([
 								if (sAction === "OK") {
 
 									that.RefreshMasterList();
-								
+
 								}
 							}
 						});
@@ -1093,7 +1136,7 @@ sap.ui.define([
 								if (sAction === "OK") {
 
 									that.RefreshMasterList();
-								
+
 								}
 							}
 						});
@@ -1108,7 +1151,7 @@ sap.ui.define([
 
 		},
 
-	getUserDeptByUserID: function (UserId) {
+		getUserDeptByUserID: function (UserId) {
 
 			var filters = [];
 			var Pocount;
@@ -1127,9 +1170,10 @@ sap.ui.define([
 				}
 
 			});
-	},
-	
-	getButtonsAsperDept: function (Pocount, UserId) {
+		},
+
+		getButtonsAsperDept: function (Pocount, UserId) {
+		
 			var oModel = this.getView().getModel();
 			var filters = [];
 			var oUserID = new sap.ui.model.Filter("UserID", "EQ", UserId);
@@ -1157,7 +1201,7 @@ sap.ui.define([
 						oRejectButton.setVisible(true);
 
 					} else if (odata.Dept === "PUR" && Pocount > 0) {
-						oQueryButton.setEnabled(true);
+						//	oQueryButton.setEnabled(true);
 						//	oApproveButton.setEnabled(true);
 						//	oRejectButton.setEnabled(true);
 
@@ -1220,7 +1264,7 @@ sap.ui.define([
 		},
 
 		handleIconTabBarSelect: function () {
-			
+
 			var that = this;
 			var iconTab = this.getView().byId("idIconTabBarNoIcons");
 			if (iconTab.getSelectedKey() === "CoverNote") {
@@ -1238,7 +1282,7 @@ sap.ui.define([
 
 		},
 
-	/*	handleSelectionFinish: function (oEvent) {
+		handleSelectionFinish: function (oEvent) {
 
 			var oModelItems = new sap.ui.model.json.JSONModel();
 			var otableUser = sap.ui.getCore().byId("tblUserReview2");
@@ -1272,7 +1316,7 @@ sap.ui.define([
 				oModelItems.setData(values);
 				otableUser.setModel(oModelItems);
 			}
-		},*/
+		},
 
 		OnPressCoverNote: function () {
 			var oModel = this.getView().getModel();
@@ -1296,7 +1340,7 @@ sap.ui.define([
 			});
 		},
 		OnPressAttachments: function () {
-			
+
 			var oModel = this.getView().getModel();
 			var PONo = this.getView().byId("objcmp").getTitle();
 			var that = this;
@@ -1309,7 +1353,7 @@ sap.ui.define([
 			var oPOH = new sap.ui.model.Filter("PO_NO", "EQ", PONo);
 			filters.push(oPOH);
 			Attachments.setBusy(true);
-		
+
 			if (PONo !== "") {
 				oModel.read("/POAttachmentsSet", {
 					filters: filters,
@@ -1321,7 +1365,9 @@ sap.ui.define([
 
 						if (Attachments.getItems().length > 0) {
 							for (var i = 0; i < Attachments.getItems().length; i++) {
-								if (Attachments.getItems()[i].getAttributes()[0].getTitle() !== OUserId) {
+								if (Attachments.getItems()[i].getAttributes()[0].getTitle() === OUserId) {
+									Attachments.getItems()[i].setEnableDelete(true);
+								} else {
 									Attachments.getItems()[i].setEnableDelete(false);
 								}
 								// Attachments.getItems()[i].getStatuses()[0].getText();
@@ -1338,7 +1384,7 @@ sap.ui.define([
 								Attachments.getItems()[i].getStatuses()[0].setText(final);
 							}
 						}
-							attachmentTitle.setText(that.getAttachmentTitleText());
+						attachmentTitle.setText(that.getAttachmentTitleText());
 
 					},
 					error: function () {
@@ -1414,7 +1460,7 @@ sap.ui.define([
 			var txtDocumentDate = this.getView().byId("PurOrdDt");
 			var txtPurOrdSts = this.getView().byId("PurOrdSts");
 
-			var DocumentDate, day, month, year, final;   
+			var DocumentDate, day, month, year, final;
 
 			oModel.read("/PurchaseOrderGeneralSet(PO_NO='" + PONo + "')", {
 				success: function (odata, oResponse) {
@@ -1447,6 +1493,32 @@ sap.ui.define([
 
 			});
 		},
+
+		OnSelectUser: function (oEvent) {
+		
+			var oModel = this.getView().getModel();
+			var oModelDataUser = new sap.ui.model.json.JSONModel();
+			var SearchText = oEvent.getSource().getValue();
+			var cmbUser = sap.ui.getCore().byId("cmbUser");
+			var filters = [];
+
+			var oUserName = new sap.ui.model.Filter("SearchText", "sap.ui.model.FilterOperator.Contains", SearchText);
+			filters.push(oUserName);
+
+			oModel.read("/UserSearchSet", {
+				filters: filters,
+				success: function (odata, oResponse) {
+
+					oModelDataUser.setData(odata);
+					cmbUser.setModel(oModelDataUser);
+				},
+				error: function () {
+					MessageBox.error("error");
+				},
+
+			});
+
+		}
 
 	});
 
