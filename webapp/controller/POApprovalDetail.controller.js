@@ -13,8 +13,8 @@ sap.ui.define([
 	return Controller.extend("POApproval.ZPOApproval.controller.POApprovalDetail", {
 
 		onInit: function (oEvent) {
-		//	this._UserID = sap.ushell.Container.getService("UserInfo").getId();
-			this._UserID = "COCKPIT2_1";
+			this._UserID = sap.ushell.Container.getService("UserInfo").getId();
+		//	this._UserID = "COCKPIT2_1";
 			var that = this;
 			var oModel = new sap.ui.model.odata.ODataModel("/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/", true);
 			this.getView().setModel(oModel);

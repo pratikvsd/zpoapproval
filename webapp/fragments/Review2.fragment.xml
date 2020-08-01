@@ -21,7 +21,7 @@
 										<core:Item key="FIN_RELEASE2" text="FIN RELEASE2"/>
 										<core:Item key="FIN_RELEASE3" text="FIN RELEASE3"/>
 									</MultiComboBox>-->
-									<MultiInput  id="cmbUserR" type="Text" placeholder="Type atleast 3 characters "  showSuggestion="true" liveChange="OnSelectUserReviwe2" tokenChange="GetUserSelectedItems">
+									<MultiInput  id="cmbUserR" type="Text" placeholder="Type atleast 3 characters " showValueHelp="false" showSuggestion="true" liveChange="OnSelectUserReviwe2" tokenChange="GetUserSelectedItems">
 										
 									</MultiInput >
 							
