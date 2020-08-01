@@ -15,14 +15,15 @@
 								</f:fields>
 							</f:FormElement>
 							<f:FormElement id="lblAddUser" label="Add User" visible="true">
-								<!--<MultiComboBox id="cmbUser2" items="{ path: '/results', sorter: { path: 'Bname' } }" selectionFinish="handleSelectionFinish">
-									<core:Item key="{Bname}" text="{NameFirst} {NameLast}"/>
-								</MultiComboBox >-->
-									<MultiComboBox id="cmbUser2" selectionFinish="handleSelectionFinish">
+							
+								<!--	<MultiComboBox id="cmbUser2" selectionFinish="handleSelectionFinish">
 										<core:Item key="FIN_RELEASE1" text="FIN RELEASE1"/>
 										<core:Item key="FIN_RELEASE2" text="FIN RELEASE2"/>
 										<core:Item key="FIN_RELEASE3" text="FIN RELEASE3"/>
-									</MultiComboBox>
+									</MultiComboBox>-->
+									<MultiInput  id="cmbUserR" type="Text" placeholder="Type atleast 3 characters "  showSuggestion="true" liveChange="OnSelectUserReviwe2" tokenChange="GetUserSelectedItems">
+										
+									</MultiInput >
 							
 							</f:FormElement>
 							<f:FormElement label="User Name">

@@ -30,13 +30,14 @@
 											<ToolbarSpacer/>
 											<Button id="deleteSelectedButton" text="Delete" press="onDeleteSelectedItems" enabled="false" visible="false" type="Transparent"></Button>
 											<ToggleButton id="selectAllButton" text="Select all" press="onSelectAllPress" enabled="false" visible="false" type="Transparent"></ToggleButton>
-											<Title text="Attachment Repository: SAP DMS"/>
+											<Title text="Attachment Repository:SAP DMS "/>
+											<!--<Image id="imgDMS"  width="60px" height="40px"></Image>-->
 											<UploadCollectionToolbarPlaceholder id="idupload"></UploadCollectionToolbarPlaceholder>
 										</OverflowToolbar>
 									</toolbar>
 									<items>
 										<UploadCollectionItem documentId="{DocumentID}" fileName="{DocumentName}" mimeType="{MimeType}" thumbnailUrl="" url="{DocumentURL}"
-											visibleEdit="false" enableDelete="true" press="onPressFileName">
+											visibleEdit="false" enableDelete="true" >
 											<attributes>
 												<ObjectAttribute active="true" visible="false" title="{AttachedByUserID}"/>
 												<ObjectAttribute active="true"  text="Uploaded By :{AttachedByUserName}" press="onAttributePress"/>

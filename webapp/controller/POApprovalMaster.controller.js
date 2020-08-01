@@ -20,7 +20,7 @@ sap.ui.define([
 			var that = this;
 
 		//	this._UserID = sap.ushell.Container.getService("UserInfo").getId();
-			this._UserID = "PURCHASE2";
+			this._UserID = "COCKPIT2_1";
 
 		},
 
