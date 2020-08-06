@@ -1,7 +1,7 @@
 <core:FragmentDefinition xmlns="sap.m" xmlns:core="sap.ui.core" xmlns:l="sap.ui.layout" xmlns:f="sap.ui.layout.form">
 	<Dialog noDataText="No Products Found" contentWidth="700px" horizontalScrolling="false">
 		<VBox class="sapUiSmallMargin">
-			<f:Form id="FormToolbarRejectionHistory" editable="true" ariaLabelledBy="Title1">
+			<f:Form  editable="true" ariaLabelledBy="Title1">
 				<f:layout>
 					<f:ResponsiveGridLayout labelSpanXL="3" labelSpanL="3" labelSpanM="3" labelSpanS="12" adjustLabelSpan="false" emptySpanXL="4" emptySpanL="4"
 						emptySpanM="4" emptySpanS="0" columnsXL="1" columnsL="1" columnsM="1" singleContainerFullSize="false"/>

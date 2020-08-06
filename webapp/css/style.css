@@ -60,11 +60,17 @@ div#__xmlview1--SimpleFormChange354wide--Form--Grid {
 
 
 /*for Background color of bar*/
- .sapMBarPH {
+.sapMIBar.sapMHeader-CTX {
     background-color: #e24040;
     padding-right: 0.25rem;
    
 }
+.sapMBarPH {
+    background-color: #e24040;
+    padding-right: 0.25rem;
+   
+}
+
 /*For Makimg tab  text Bold*/
 .sapMITBFilter .sapMITBText {
     line-height: .9375rem;

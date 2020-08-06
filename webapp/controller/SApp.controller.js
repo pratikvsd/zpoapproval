@@ -5,7 +5,7 @@ sap.ui.define([
 
 	return Controller.extend("POApproval.ZPOApproval.controller.SApp", {
 		onInit: function () {
-
+			
 		}
 	});
 });

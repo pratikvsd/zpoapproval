@@ -67,34 +67,6 @@
 					"bundleName": "POApproval.ZPOApproval.i18n.i18n"
 				}
 			},
-			"PurchaseOrderSet": {
-				"type": "sap.ui.model.json.JSONModel",
-				"settings": {},
-				"uri": "jsondata/PurchaseOrderData.json",
-				"preload": false
-			},
-			"AttachmentItemsSet": {
-				"type": "sap.ui.model.json.JSONModel",
-				"settings": {},
-				"uri": "jsondata/AttachmentItems.json",
-				"preload": false
-			},
-			"UserDataSet": {
-				"type": "sap.ui.model.json.JSONModel",
-				"settings": {},
-				"uri": "jsondata/ToUser.json",
-				"preload": false
-			},
-			"QueryHistorySet": {
-				"type": "sap.ui.model.json.JSONModel",
-				"settings": {},
-				"uri": "jsondata/QueryHistory.json"
-			},
-			"ApprovalHistorySet": {
-				"type": "sap.ui.model.json.JSONModel",
-				"settings": {},
-				"uri": "jsondata/ApprovalHistory.json"
-			},
 			"": {
 				"type": "sap.ui.model.odata.v2.ODataModel",
 				"settings": {

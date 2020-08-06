@@ -6,6 +6,7 @@
 			<Page title="Volvo Eicher Commercial Vehicles Purchase Order Approval" navButtonPress="handleNavButtonPress"
 				showNavButton="{device>/system/phone}">
 				<content>
+					<Text id="idSelection"  visible="false" />
 					<ObjectHeader visible="false">
 						<statuses>
 							<ObjectStatus id="objPrice"/>

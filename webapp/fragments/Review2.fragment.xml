@@ -24,6 +24,10 @@
 									<MultiInput  id="cmbUserR" type="Text" placeholder="Type atleast 3 characters " showValueHelp="false" showSuggestion="true" liveChange="OnSelectUserReviwe2" tokenChange="GetUserSelectedItems">
 										
 									</MultiInput >
+									
+									<!--	<Input id="cmbUserR" type="Text" placeholder="Type atleast 3 characters "  showSuggestion="true" liveChange="OnSelectUserReviwe2" suggestionItemSelected="GetUserSelectedItems">
+									
+									</Input>-->
 							
 							</f:FormElement>
 							<f:FormElement label="User Name">

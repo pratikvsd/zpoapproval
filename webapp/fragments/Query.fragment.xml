@@ -17,9 +17,7 @@
 							<f:FormElement label="To User">
 								<f:fields>
 									<Input id="cmbUser" type="Text" placeholder="Type atleast 3 characters "  showSuggestion="true" liveChange="OnSelectUser">
-										<!--<suggestionItems>
-											<core:Item key="{Bname}" text="{NameFirst} {NameLast}"/>
-										</suggestionItems>-->
+									
 									</Input>
 									<!--	<ComboBox id="cmbUser" items="{ path: '/results', sorter: { path: 'Bname' } }" selectionChange="OnSelectUser">
 										<core:Item key="{Bname}" text="{NameFirst} {NameLast}"/>

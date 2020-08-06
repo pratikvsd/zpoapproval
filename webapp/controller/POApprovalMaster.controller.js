@@ -20,12 +20,14 @@ sap.ui.define([
 			var that = this;
 
 			this._UserID = sap.ushell.Container.getService("UserInfo").getId();
-		//	this._UserID = "COCKPIT2_1";
+		//	this._UserID = "PURCHASE1";
+
+			this._Flag = "false";
 
 		},
 
 		onBeforeRendering: function () {
-		
+
 			var oModel = new sap.ui.model.odata.ODataModel("/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/", true);
 			this.getView().setModel(oModel);
 
@@ -48,30 +50,62 @@ sap.ui.define([
 
 			});
 
-			oList.attachUpdateFinished(function (oEvent) {
+		
+		},
+		attachUpdateFinished: function (oEvent) {
+		
+			var aItems = oEvent.getSource().getItems();
 
-				var aItems = oEvent.getSource().getItems();
+			var TempPONoSelectionChange = this.getView().byId("txtTemPOSelctionChange");
+
+			if (this._Flag === "false") {
 				if (aItems.length > 0) {
 					oEvent.getSource().getItems()[0].setSelected(true);
 					oEvent.getSource().getItems()[0].firePress();
+					this._Flag = "true";
 				}
-			});
+
+			} else if (this._Flag === "true") {
+				if (aItems.length > 0) {
+
+					for (var i = 0; i < aItems.length; i++) {
+						if (aItems[i].getTitle() === TempPONoSelectionChange.getText()) {
+							aItems[i].setSelected(true);
+							aItems[i].firePress();
+						//	this._Flag = "false";
+							break;
+
+						} else {
+							oEvent.getSource().getItems()[0].setSelected(true);
+							oEvent.getSource().getItems()[0].firePress();
+						}
+					}
+				}
+			}
+
 		},
 
 		onSelectionChange: function (e) {
 
+			var oList = this.getView().byId("listPO");
+			var aItems = oList.getItems();
 			var PoNo = e.getParameters().listItem.getTitle();
 			var PoStatus = e.getParameters().listItem.getFirstStatus().getText();
+
+			var TempPONoSelectionChange = this.getView().byId("txtTemPOSelctionChange");
+			TempPONoSelectionChange.setText(PoNo);
 			var postatus = "";
+			//	var Selection = "";
 			if (PoStatus === "In Query") {
 				postatus = "Q";
 			} else if (PoStatus === "In Approval") {
 				postatus = "A";
 			}
-
+		
 			this.getRouter().navTo("POApprovalDetail", {
 				PO_No: PoNo,
-				PO_Status: postatus
+				PO_Status: postatus,
+				//	Selection:Selection
 			});
 
 			if (this._prevSelect) {
@@ -93,14 +127,16 @@ sap.ui.define([
 
 			var objEdit = oEvent.getSource().getBindingContext().getObject();
 			var postatus = "";
+			//		var Selection = "";
 			if (objEdit.PO_Status === "In Query") {
 				postatus = "Q";
 			} else if (objEdit.PO_Status === "In Approval") {
 				postatus = "A";
 			}
+		
 			this.getRouter().navTo("POApprovalDetail", {
 				PO_No: objEdit.PO_No,
-				PO_Status: postatus
+				PO_Status: postatus,
 			});
 
 		},
