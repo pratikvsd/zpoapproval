@@ -20,7 +20,7 @@ sap.ui.define([
 			var that = this;
 
 			this._UserID = sap.ushell.Container.getService("UserInfo").getId();
-		//	this._UserID = "PURCHASE1";
+		//	this._UserID = "COCKPIT2_1";
 
 			this._Flag = "false";
 
@@ -50,7 +50,14 @@ sap.ui.define([
 
 			});
 
-		
+		/*	oList.attachUpdateFinished(function (oEvent) {
+
+				var aItems = oEvent.getSource().getItems();
+				if (aItems.length > 0) {
+					oEvent.getSource().getItems()[0].setSelected(true);
+					oEvent.getSource().getItems()[0].firePress();
+				}
+			});*/
 		},
 		attachUpdateFinished: function (oEvent) {
 		
@@ -65,7 +72,8 @@ sap.ui.define([
 					this._Flag = "true";
 				}
 
-			} else if (this._Flag === "true") {
+			}
+			else if (this._Flag === "true") {
 				if (aItems.length > 0) {
 
 					for (var i = 0; i < aItems.length; i++) {
@@ -76,6 +84,7 @@ sap.ui.define([
 							break;
 
 						} else {
+							//	this._Flag = "false";
 							oEvent.getSource().getItems()[0].setSelected(true);
 							oEvent.getSource().getItems()[0].firePress();
 						}

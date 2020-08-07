@@ -24,7 +24,7 @@
 									change="onChange" fileDeleted="onFileDeleted" filenameLengthExceed="onFilenameLengthExceed" fileRenamed="onFileRenamed"
 									fileSizeExceed="onFileSizeExceed" selectionChange="onSelectionChange" typeMissmatch="onTypeMissmatch" uploadComplete="onUploadComplete"
 									beforeUploadStarts="onBeforeUploadStarts"  items="{path:'/results'}"
-									uploadUrl="/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/POAttachmentsSet" mode="MultiSelect">
+									uploadUrl="/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/POAttachmentsSet" >
 									<toolbar>
 										<OverflowToolbar id="myId">
 											<Title id="attachmentTitle"/>

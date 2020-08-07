@@ -14,7 +14,7 @@ sap.ui.define([
 
 		onInit: function (oEvent) {
 			this._UserID = sap.ushell.Container.getService("UserInfo").getId();
-		//	this._UserID = "PURCHASE1";
+		//	this._UserID = "COCKPIT2_1";
 			var that = this;
 			var oModel = new sap.ui.model.odata.ODataModel("/sap/opu/odata/sap/ZVECV_PURCHASE_ORDER_APPROVAL_SRV/", true);
 			this.getView().setModel(oModel);
@@ -100,7 +100,6 @@ sap.ui.define([
 							oList1.setModel(oModelData);
 							oHtml.setVisible(true);
 							that.handleIconTabBarSelect();
-								
 
 						} else {
 							oModelData.setData(odata);
@@ -134,9 +133,8 @@ sap.ui.define([
 
 							oModelData.setData(odata);
 							oList2.setModel(oModelData);
-								oHtml.setVisible(true);
+							oHtml.setVisible(true);
 							that.handleIconTabBarSelect();
-							
 
 						} else {
 							oModelData.setData(odata);
@@ -190,6 +188,9 @@ sap.ui.define([
 
 			var oApproveButton = this.getView().byId("btnApprove");
 			var oApproveReject = this.getView().byId("btnReject");
+			var oApproveButtonRelease = this.getView().byId("btnApproveRelese");
+			var oReviewbButton = this.getView().byId("btnReview");
+
 
 			//	var oSelection = this.getView().byId("idSelection");
 
@@ -205,13 +206,20 @@ sap.ui.define([
 
 				if (txtPO_Status.getText() === "Q") {
 					oApproveButton.setEnabled(false);
+					oApproveButtonRelease.setEnabled(false);
 					oApproveReject.setEnabled(false);
+				oReviewbButton.setEnabled(false); 
+
+
 				} else if (txtPO_Status.getText() === "A") {
 					oApproveButton.setEnabled(true);
+					oApproveButtonRelease.setEnabled(true);
 					oApproveReject.setEnabled(true);
+						oReviewbButton.setEnabled(true); 
+
 				}
-						that.handleIconTabBarSelect();
-			//	that.OnPressCoverNote();
+				that.handleIconTabBarSelect();
+				//	that.OnPressCoverNote();
 
 			}
 
@@ -1143,7 +1151,6 @@ sap.ui.define([
 							actions: [sap.m.MessageBox.Action.OK],
 							onClose: function (sAction) {
 								if (sAction === "OK") {
-
 									that.RefreshMasterList();
 
 								}
@@ -1257,9 +1264,9 @@ sap.ui.define([
 						oApproveButtonRelease.setVisible(true);
 
 						oQueryButton.setEnabled(true);
-						oReviewbButton.setEnabled(true);
-						oApproveButton.setEnabled(true);
-						oRejectButton.setEnabled(true);
+					//	oReviewbButton.setEnabled(true);
+					//	oApproveButton.setEnabled(true);
+					//	oRejectButton.setEnabled(true);
 
 					}
 
@@ -1362,17 +1369,17 @@ sap.ui.define([
 			var oModel = this.getView().getModel();
 			var PONo = this.getView().byId("objcmp").getTitle();
 			var oHtml = this.getView().byId("idFrame");
-		//	oHtml.setVisible(true);
+			//	oHtml.setVisible(true);
 			var sRead = "/SelectedPOContentSet('" + PONo + "')/$value";
-
-			oModel.read(sRead, {
+		//	oModel.defaultHttpClient.enableJsonpCallback = true;
+			oModel.read(sRead,{
 				success: function (oData, oResponse) {
 					if (oResponse.body !== "") {
 						var pdfURL = oResponse.requestUri;
 						oHtml.setContent("<iframe src=" + pdfURL + " width='100%' height='600px'></iframe>");
 						oHtml.setVisible(true);
 					} else {
-					//	oHtml.setVisible(false);
+						//	oHtml.setVisible(false);
 					}
 				},
 				error: function () {
@@ -1512,15 +1519,15 @@ sap.ui.define([
 			oModel.read("/PurchaseOrderGeneralSet(PO_NO='" + PONo + "')", {
 				success: function (odata, oResponse) {
 
-					txtPO_No.setText(oResponse.data.PO_NO);
-					txtPODesc.setText(oResponse.data.PO_Description);
-					txtPurOrdInt.setText(oResponse.data.PO_Initiator);
-					txtVendor.setText(oResponse.data.Vendor);
-					txtPlant.setText(oResponse.data.Plant);
-					txtDocument_Type.setText(oResponse.data.Document_Type);
-					txtPurOrdSts.setText(oResponse.data.PO_Status);
-					if (oResponse.data.Document_Date !== null) {
-						DocumentDate = oResponse.data.Document_Date;
+					txtPO_No.setText(odata.PO_NO);
+					txtPODesc.setText(odata.PO_Description);
+					txtPurOrdInt.setText(odata.PO_Initiator);
+					txtVendor.setText(odata.Vendor);
+					txtPlant.setText(odata.Plant);
+					txtDocument_Type.setText(odata.Document_Type);
+					txtPurOrdSts.setText(odata.PO_Status);
+					if (odata.Document_Date !== null) {
+						DocumentDate = odata.Document_Date;
 						year = DocumentDate.substring(0, 4);
 						month = DocumentDate.substring(4, 6);
 						day = DocumentDate.substring(6, 8);
